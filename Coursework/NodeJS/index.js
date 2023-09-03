@@ -1,7 +1,14 @@
-const Logger = require('./logger');
+const http = require('http');
+const path = require('path');
+const fs = require('fs');
 
-const logger = new Logger();
+// check for the port. If the environment variable is not found, use 8080
+const PORT = process.env.PORT || 8080;
 
-logger.on('message', (data) => console.log('Called listener:', data));
+const server = http.createServer((req, res) => {
+    if (req.url == '/') {
+        res.end('<h1>Index</h1>');
+    }
+});
 
-logger.log("Hello World");
+server.listen(PORT, () => console.log(`server running on ${PORT}`));
