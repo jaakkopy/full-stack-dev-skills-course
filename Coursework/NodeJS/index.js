@@ -58,7 +58,6 @@ const getContentType = (filePath) => {
 const server = http.createServer((req, res) => {
     const filePath = path.join(__dirname, PUBLIC, req.url == '/' ? 'index.html' : req.url);
     const contentType = getContentType(filePath);
-
     fs.readFile(filePath, (err, content) => {
         if (err) {
             handleErr(res, err);
