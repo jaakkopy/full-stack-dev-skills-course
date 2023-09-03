@@ -6,9 +6,22 @@ const fs = require('fs');
 const PORT = process.env.PORT || 8080;
 
 const server = http.createServer((req, res) => {
+    /*
     if (req.url == '/') {
-        res.end('<h1>Index</h1>');
+        fs.readFile(path.join(__dirname, 'public', 'index.html'), (err, content) => {
+            if (err) {
+                res.writeHead(500); 
+                res.end();
+            }
+            res.writeHead(200, {'Content-Type': 'text/html'}); // write to the HTTP headers 
+            res.end(content);
+        });
     }
+    else if (req.url == '/api/users') {
+        res.writeHead(200, {'Content-Type': 'application/json'}); // write to the HTTP headers 
+        res.end(JSON.stringify([{'Name': 'Bob'}, {'Name': 'Jane'}]));
+    }
+    */
 });
 
 server.listen(PORT, () => console.log(`server running on ${PORT}`));
