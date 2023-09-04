@@ -1,6 +1,9 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
+// set public as a static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
     res.send("Hello World");
