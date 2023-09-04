@@ -1,8 +1,12 @@
 const express = require('express');
 const path = require('path');
+const middleware = require('./middleware');
 const dummydata = require('./Dummydata.js');
 
 const app = express();
+// register the middleware
+app.use(middleware.logger);
+
 // set public as a static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
