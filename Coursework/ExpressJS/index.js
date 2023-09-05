@@ -1,9 +1,15 @@
 const express = require('express');
 const path = require('path');
+const { engine } = require('express-handlebars');
 const middleware = require('./middleware');
 const memberRouter = require('./routers/members.js');
 
 const app = express();
+
+// add handlebars as the template engine
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+
 // add middleware for parsing POST request JSON body
 app.use(express.json());
 /* 
