@@ -3,6 +3,7 @@ const path = require('path');
 const { engine } = require('express-handlebars');
 const middleware = require('./middleware');
 const memberRouter = require('./routers/members.js');
+let dummydata = require('./routers/Dummydata.js');
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use('/api/members', memberRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
-    res.render('index');
+    res.render('index', {title: 'Members App', members: dummydata});
 });
 
 const PORT = process.env.PORT || 5000;
