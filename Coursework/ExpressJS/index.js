@@ -11,7 +11,12 @@ app.use(middleware.logger);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/members', (req, res) => res.json(dummydata));
-app.get('/api/members/:id', (req, res) => res.json(dummydata.filter(user => user.id === Number(req.params.id))));
+app.get('/api/members/:id', (req, res) => {
+    const content = dummydata.filter(user => user.id === Number(req.params.id));
+    if (content.length == 0)
+        res.status(404).json({msg: `No user with id ${req.params.id} found`});
+    res.json(content[0]);
+});
 
 app.get("/", (req, res) => {
     res.send("Hello World");
