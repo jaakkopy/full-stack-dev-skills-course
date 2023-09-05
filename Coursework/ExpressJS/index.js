@@ -7,7 +7,7 @@ const memberRouter = require('./routers/members.js');
 const app = express();
 
 // add handlebars as the template engine
-app.engine('handlebars', engine());
+app.engine('handlebars', engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 // add middleware for parsing POST request JSON body
@@ -25,7 +25,7 @@ app.use('/api/members', memberRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.render('index');
 });
 
 const PORT = process.env.PORT || 5000;
