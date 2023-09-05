@@ -10,16 +10,19 @@ const findUser = (id, res) => {
         res.status(404).json({msg: `No user with id ${id} found`});
     else
         return content[0]
+    return null;
 }
 
 router.get('/', (req, res) => res.json(dummydata));
 
 router.get('/:id', (req, res) => {
     const existingUser = findUser(req.params.id, res);
-    res.json(existingUser);
+    if (existingUser != null)
+        res.json(existingUser);
 });
 
 router.post('/', (req, res) => {
+    console.log(req.body);
     const user = {
         id: uuid.v4(),
         name: req.body.name,
@@ -28,19 +31,22 @@ router.post('/', (req, res) => {
     };
     if (!user.name || !user.age)
         res.status(400).json({msg: 'Please add the name and age'});
-
-    dummydata.push(user);
-    res.json(user);
+    else {
+        dummydata.push(user);
+        res.json(user);
+    }
 });
 
 router.put('/:id', (req, res) => {
     let existingUser = findUser(req.params.id, res);
-    const updateInfo = req.body;
-    if (updateInfo.name)
-        existingUser.name = updateInfo.name;
-    if (updateInfo.age)
-        existingUser.age = updateInfo.age;
-    res.json(existingUser);
+    if (existingUser != null) {
+        const updateInfo = req.body;
+        if (updateInfo.name)
+            existingUser.name = updateInfo.name;
+        if (updateInfo.age)
+            existingUser.age = updateInfo.age;
+        res.json(existingUser);   
+    }
 });
 
 router.delete('/:id', (req, res) => {

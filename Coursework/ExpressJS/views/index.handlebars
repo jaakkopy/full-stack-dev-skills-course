@@ -5,3 +5,15 @@
         <li class="list-group-item">{{this.name}}: {{this.age}}</li>
     {{/each}}
 </ul>
+
+<form action="/api/members" method="POST" class="mb-4">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" name="age" class="form-control"/>
+    </div>
+    <input type="submit" value="Add member" class="btn btn-primary btn-block"/>
+</form>
