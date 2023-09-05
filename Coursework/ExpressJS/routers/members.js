@@ -43,4 +43,9 @@ router.put('/:id', (req, res) => {
     res.json(existingUser);
 });
 
+router.delete('/:id', (req, res) => {
+    dummydata = dummydata.filter(user => user.id !== req.params.id);
+    res.json(dummydata);
+});
+
 module.exports = router;
