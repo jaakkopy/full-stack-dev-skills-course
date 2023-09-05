@@ -11,6 +11,7 @@ app.use(middleware.logger);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/members', (req, res) => res.json(dummydata));
+app.get('/api/members/:id', (req, res) => res.json(dummydata.filter(user => user.id === Number(req.params.id))));
 
 app.get("/", (req, res) => {
     res.send("Hello World");
