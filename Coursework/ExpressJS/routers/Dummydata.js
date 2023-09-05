@@ -1,4 +1,4 @@
-const dummy = [
+let dummy = [
     {
         id: 1,
         name: 'John Doe',

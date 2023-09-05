@@ -12,4 +12,8 @@ router.get('/:id', (req, res) => {
     res.json(content[0]);
 });
 
+router.post('/', (req, res) => {
+    res.json(req.body);
+});
+
 module.exports = router;
