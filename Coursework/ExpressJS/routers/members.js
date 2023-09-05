@@ -4,13 +4,19 @@ let dummydata = require('./Dummydata.js');
 
 const router = Router();
 
+const findUser = (id, res) => {
+    const content = dummydata.filter(user => user.id === id);
+    if (content.length == 0)
+        res.status(404).json({msg: `No user with id ${id} found`});
+    else
+        return content[0]
+}
+
 router.get('/', (req, res) => res.json(dummydata));
 
 router.get('/:id', (req, res) => {
-    const content = dummydata.filter(user => user.id === req.params.id);
-    if (content.length == 0)
-        res.status(404).json({msg: `No user with id ${req.params.id} found`});
-    res.json(content[0]);
+    const existingUser = findUser(req.params.id, res);
+    res.json(existingUser);
 });
 
 router.post('/', (req, res) => {
@@ -25,6 +31,16 @@ router.post('/', (req, res) => {
 
     dummydata.push(user);
     res.json(user);
+});
+
+router.put('/:id', (req, res) => {
+    let existingUser = findUser(req.params.id, res);
+    const updateInfo = req.body;
+    if (updateInfo.name)
+        existingUser.name = updateInfo.name;
+    if (updateInfo.age)
+        existingUser.age = updateInfo.age;
+    res.json(existingUser);
 });
 
 module.exports = router;
