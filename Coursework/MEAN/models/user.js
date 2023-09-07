@@ -22,13 +22,15 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-module.exports.getUserById = async (id, callback) => {
-    User.findById(id, callback);
+module.exports.getUserById = async (id) => {
+    const user = await User.findById(id).exec();
+    return user;
 }
 
 module.exports.getUserByUsername = async (username, callback) => {
-    const query = {username};
-    User.findByOne(query, callback);
+    const query = {username: username};
+    const res = await User.findOne(query);
+    return res;
 }
 
 module.exports.addUser = async (newUser) => {
@@ -43,4 +45,12 @@ module.exports.addUser = async (newUser) => {
             newUser.save();
         });
     }); 
+}
+
+module.exports.comparePassword = (password, hash, callback) => {
+    bcrypt.compare(password, hash, (err, match) => {
+        if (err)
+            throw err;
+        callback(null, match);
+    });
 }

@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const passport = require('passport-jwt');
 const mongoose = require('mongoose');
 const config = require('./config/database');
+const passport = require('passport');
+require('./config/passport')(passport);
 
 mongoose.connect(config.database);
 
@@ -18,6 +19,7 @@ mongoose.connection.on('error', (err) => {
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 
 app.use('/users', require('./routes/users'));
 
