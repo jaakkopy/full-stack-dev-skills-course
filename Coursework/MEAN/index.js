@@ -11,6 +11,10 @@ mongoose.connection.on('connected', () => {
     console.log(`Connected to database ${config.database}`);
 });
 
+mongoose.connection.on('error', (err) => {
+    console.log(`Database error: ${err}`);
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json());
