@@ -2,6 +2,7 @@ const Router = require('express').Router;
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
+const passport = require('passport');
 
 const router = Router();
 
@@ -59,7 +60,10 @@ router.post('/authenticate', async (req, res) => {
     } catch (err) {
         res.json({success: false, msg: 'Failure'});
     }
-    
+});
+
+router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.json({user: req.user});
 });
 
 module.exports = router;
