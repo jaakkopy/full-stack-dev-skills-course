@@ -22,11 +22,25 @@ const UserSchema = mongoose.Schema({
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
-module.exports.getUserById = (id, callback) => {
+module.exports.getUserById = async (id, callback) => {
     User.findById(id, callback);
 }
 
-module.exports.getUserByUsername = (username, callback) => {
+module.exports.getUserByUsername = async (username, callback) => {
     const query = {username};
     User.findByOne(query, callback);
+}
+
+module.exports.addUser = async (newUser) => {
+    const rounds = 10;
+    bcrypt.genSalt(rounds, (err, salt) => {
+        if (err)
+            throw err;
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err)
+                throw err;
+            newUser.password = hash;
+            newUser.save();
+        });
+    }); 
 }
