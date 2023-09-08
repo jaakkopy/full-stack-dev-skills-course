@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Registereduser } from '../registereduser';
 
 @Component({
   selector: 'app-register',
@@ -15,12 +16,11 @@ export class RegisterComponent {
   });
 
   onRegisterSubmit() {
-    const user = {
-      name: this.registerForm.value.name,
-      username: this.registerForm.value.username,
-      email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
+    const user: Registereduser = {
+      name: this.registerForm.value.name ?? '',
+      username: this.registerForm.value.username ?? '',
+      email: this.registerForm.value.email ?? '',
+      password: this.registerForm.value.password ?? '',
     };
-    console.log(user);
   }
 }
