@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Registereduser } from '../registereduser';
 import { ValidateService } from '../services/validate.service';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -13,6 +14,7 @@ import Swal from 'sweetalert2'
 export class RegisterComponent {
   validateService: ValidateService = inject(ValidateService);
   authService: AuthService = inject(AuthService);
+  router: Router = inject(Router);
 
   registerForm = new FormGroup({
     name: new FormControl(''),
@@ -39,8 +41,14 @@ export class RegisterComponent {
       return false;
     }
 
-    this.authService.registerUser(user).subscribe((data) => {
-      console.log(data);
+    this.authService.registerUser(user).subscribe((data: any) => {
+      if (data?.success) {
+        Swal.fire('Success', 'Registration successful', 'success');
+        this.router.navigate(['/login']); 
+      } else {
+        Swal.fire('Failure', 'Something went wrong', 'error');
+        this.router.navigate(['/register']); 
+      }
     });
 
     return true;
