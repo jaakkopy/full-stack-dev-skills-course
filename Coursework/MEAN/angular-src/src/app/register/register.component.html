@@ -1,1 +1,22 @@
-<p>register works!</p>
+<div>
+    <h2 class="page-header">Register</h2>
+    <form [formGroup]="registerForm" (submit)="onRegisterSubmit()">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" formControlName="name" placeholder="Enter Name">
+        </div>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control" formControlName="username" placeholder="Enter Username">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" formControlName="email">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" formControlName="password" placeholder=" Enter Password">
+        </div>
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+</div>
