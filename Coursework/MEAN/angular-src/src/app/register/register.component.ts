@@ -15,6 +15,12 @@ export class RegisterComponent {
   });
 
   onRegisterSubmit() {
-    console.log(this.registerForm.value.name, this.registerForm.value.username);
+    const user = {
+      name: this.registerForm.value.name,
+      username: this.registerForm.value.username,
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password,
+    };
+    console.log(user);
   }
 }
