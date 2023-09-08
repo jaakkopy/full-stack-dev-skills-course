@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Registereduser } from '../registereduser';
 import { ValidateService } from '../services/validate.service';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-register',
@@ -27,12 +28,12 @@ export class RegisterComponent {
     };
 
     if (!this.validateService.validateRegister(user)) {
-      console.log("register validation fail");
+      Swal.fire('Registration error', 'Please fill in all the fields', 'warning');
       return false;
     }
 
     if (!this.validateService.validateEmail(user.email)) {
-      console.log("email validation fail");
+      Swal.fire('Registration error', 'Please enter a valid email', 'warning');
       return false;
     }
 
