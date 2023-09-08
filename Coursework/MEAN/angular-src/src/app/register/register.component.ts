@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Registereduser } from '../registereduser';
 import { ValidateService } from '../services/validate.service';
+import { AuthService } from '../services/auth.service';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -11,6 +12,7 @@ import Swal from 'sweetalert2'
 })
 export class RegisterComponent {
   validateService: ValidateService = inject(ValidateService);
+  authService: AuthService = inject(AuthService);
 
   registerForm = new FormGroup({
     name: new FormControl(''),
@@ -36,6 +38,10 @@ export class RegisterComponent {
       Swal.fire('Registration error', 'Please enter a valid email', 'warning');
       return false;
     }
+
+    this.authService.registerUser(user).subscribe((data) => {
+      console.log(data);
+    });
 
     return true;
   }
