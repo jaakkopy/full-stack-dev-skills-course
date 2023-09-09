@@ -5,12 +5,13 @@ import { Loginparams } from '../loginparams';
 import { Observable } from 'rxjs';
 import { Loggedinuser } from '../loggedinuser';
 import { JwtHelperService } from '@auth0/angular-jwt'
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl: String = "http://localhost:5000";
+  baseUrl: String = environment.production ? "" : "http://localhost:5000/";
   http: HttpClient = inject(HttpClient);
   authToken: string | null = null;
   user: Loggedinuser | null = null;
@@ -19,14 +20,14 @@ export class AuthService {
 
   registerUser(user: RegisterParams): Observable<any> {
     let headers = new HttpHeaders();
-    return this.http.post(`${this.baseUrl}/users/register`, user, {
+    return this.http.post(`${this.baseUrl}users/register`, user, {
       headers: headers 
     });
   }
 
   authenticateUser(user: Loginparams): Observable<any> {
     let headers = new HttpHeaders();
-    return this.http.post(`${this.baseUrl}/users/authenticate`, user, {
+    return this.http.post(`${this.baseUrl}users/authenticate`, user, {
       headers: headers 
     });
   }
@@ -40,7 +41,7 @@ export class AuthService {
       'Content-Type': 'application/json', 
       'Authorization': this.authToken 
     });
-    return this.http.get(`${this.baseUrl}/users/profile`, {headers: headers});
+    return this.http.get(`${this.baseUrl}users/profile`, {headers: headers});
   }
 
   loadToken() {
