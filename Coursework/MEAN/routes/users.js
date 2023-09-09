@@ -28,7 +28,7 @@ router.post('/authenticate', async (req, res) => {
     try {
         const user = await User.getUserByUsername(username);
         if (!user) {
-            res.json({success: false, msg: 'User not found'});
+            return res.json({success: false, msg: 'User not found'});
         }
         // Check if the password matches the hash
         User.comparePassword(password, user.password, (err, match) => {
