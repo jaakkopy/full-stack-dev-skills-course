@@ -20,7 +20,10 @@
                     <a class="nav-link" [routerLink]="['/profile']">Profile</a>
                 </li>
                 <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-                    <a class="nav-link" href="#" (click)="onLogoutClick()">Logout</a>
+                    <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
+                </li>
+                <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+                    <a class="nav-link" [routerLink]="['/']" (click)="onLogoutClick()">Logout</a>
                 </li>
             </ul>
         </div>
