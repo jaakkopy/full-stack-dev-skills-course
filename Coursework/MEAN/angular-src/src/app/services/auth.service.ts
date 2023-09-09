@@ -4,6 +4,7 @@ import { RegisterParams } from '../registerparams';
 import { Loginparams } from '../loginparams';
 import { Observable } from 'rxjs';
 import { Loggedinuser } from '../loggedinuser';
+import { JwtHelperService } from '@auth0/angular-jwt'
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,11 @@ export class AuthService {
   loadToken() {
     const token = localStorage.getItem('id_token');
     this.authToken = token;
+  }
+
+  isLoggedIn() {
+    const service = new JwtHelperService();
+    return !service.isTokenExpired(this.authToken);
   }
 
   storeUserData(token: string, user: Loggedinuser) {
