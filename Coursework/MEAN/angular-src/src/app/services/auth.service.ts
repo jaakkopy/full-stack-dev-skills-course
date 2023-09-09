@@ -30,6 +30,22 @@ export class AuthService {
     });
   }
 
+  getProfile(): null | Observable<any> {
+    this.loadToken();
+    if (this.authToken == null) {
+      return null;
+    }
+    let headers = new HttpHeaders();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(`${this.baseUrl}/users/profile`, {headers: headers});
+  }
+
+  loadToken() {
+    const token = localStorage.getItem('id_token');
+    this.authToken = token;
+  }
+
   storeUserData(token: string, user: Loggedinuser) {
     // angular-jwt looks for the id_token key automatically from the local storage.
     localStorage.setItem('id_token', token);
