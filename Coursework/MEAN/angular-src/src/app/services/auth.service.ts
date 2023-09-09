@@ -35,9 +35,10 @@ export class AuthService {
     if (this.authToken == null) {
       return null;
     }
-    let headers = new HttpHeaders();
-    headers.append('Authorization', this.authToken);
-    headers.append('Content-Type', 'application/json');
+    const headers = new HttpHeaders({ 
+      'Content-Type': 'application/json', 
+      'Authorization': this.authToken 
+    });
     return this.http.get(`${this.baseUrl}/users/profile`, {headers: headers});
   }
 

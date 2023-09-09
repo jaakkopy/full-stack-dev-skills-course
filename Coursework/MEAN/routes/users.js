@@ -63,7 +63,15 @@ router.post('/authenticate', async (req, res) => {
 });
 
 router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.json({user: req.user});
+    const toSend = {
+        user: {
+            id: req.user._id,
+            name: req.user.name,
+            email: req.user.email,
+            username: req.user.username,
+        }
+    }
+    res.json(toSend);
 });
 
 module.exports = router;
