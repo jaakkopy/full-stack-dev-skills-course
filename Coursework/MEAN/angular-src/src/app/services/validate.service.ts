@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Registereduser } from '../registereduser';
+import { RegisterParams } from '../registerparams';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,7 @@ export class ValidateService {
 
   constructor() { }
 
-  validateRegister(user: Registereduser): boolean {
+  validateRegister(user: RegisterParams): boolean {
     if (user.name == '' || user.username == '' || user.email == '' || user.password == '') {
       return false;
     }

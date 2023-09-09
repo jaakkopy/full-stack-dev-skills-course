@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Registereduser } from '../registereduser';
+import { RegisterParams } from '../registerparams';
 import { ValidateService } from '../services/validate.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -24,7 +24,7 @@ export class RegisterComponent {
   });
 
   onRegisterSubmit(): boolean {
-    const user: Registereduser = {
+    const user: RegisterParams = {
       name: this.registerForm.value.name ?? '',
       username: this.registerForm.value.username ?? '',
       email: this.registerForm.value.email ?? '',

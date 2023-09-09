@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Registereduser } from '../registereduser';
+import { RegisterParams } from '../registerparams';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class AuthService {
 
   constructor() { }
 
-  registerUser(user: Registereduser) {
+  registerUser(user: RegisterParams) {
     let headers = new HttpHeaders();
     return this.http.post(`${this.baseUrl}/users/register`, user, {
       headers: headers 
