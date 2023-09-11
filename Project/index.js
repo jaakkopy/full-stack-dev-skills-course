@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const dbConfig = require('./config/database');
+const passport = require('passport');
+require('./config/passport')(passport);
 
 mongoose.connect(dbConfig.database);
 

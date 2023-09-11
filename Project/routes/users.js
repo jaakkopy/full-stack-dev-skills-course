@@ -14,7 +14,6 @@ router.post('/register', async (req, res) => {
         if (err instanceof TypeError) {
             status = 403;
             msg = err.message;
-            res.status(200).json(helpers.failureMsg(err.message));
         // the duplicate key error is not a validator error: https://mongoosejs.com/docs/validation.html
         } else if (err.message.indexOf('duplicate key error') !== -1) {
             status = 403;
@@ -24,6 +23,26 @@ router.post('/register', async (req, res) => {
             msg = "Internal server error";
         }
         res.status(status).json(helpers.failureMsg(msg));
+    }
+});
+
+router.post('/authenticate', async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    try {
+        const user = await User.getUserByUsername(username);
+        if (!user) {
+            return res.status(404).json(helpers.failureMsg('User not found'));
+        }
+        const isMatch = await User.comparePassword(password, user.password);
+        if (isMatch) {
+            const {token, signWith} = helpers.signJwtWithUserObject(user);
+            res.status(200).json(helpers.createJwtResponse(token, signWith));
+        } else {
+            res.status(403).json(helpers.failureMsg('Incorrect credentials'));
+        }
+    } catch (err) {
+        res.status(403).json(helpers.failureMsg('Authentication failed'));
     }
 });
 
