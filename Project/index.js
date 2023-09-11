@@ -11,10 +11,12 @@ mongoose.connection.on('connected', () => {
 
 mongoose.connection.on('error', (err) => {
     console.log(`Database error: ${err}`);
+    process.exit(1);
 });
 
 const app = express();
 app.use(express.json());
+app.use('/users', require('./routes/users.js'));
 
 app.get('/', (req, res) => {
     res.send("Hello");
