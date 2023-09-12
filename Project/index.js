@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dbConfig = require('./config/database');
 const passport = require('passport');
 require('./config/passport')(passport);
+const morgan = require('morgan');
 
 mongoose.connect(dbConfig.database);
 
@@ -17,6 +18,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 const app = express();
+app.use(morgan('tiny'));
+app.use(require('cors')());
 app.use(express.json());
 app.use('/users', require('./routes/users'));
 app.use('/groups', require('./routes/groups'));
