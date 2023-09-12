@@ -11,7 +11,7 @@ import { Loginparams } from '../interfaces/loginparams';
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl: String = environment.production ? "" : "http://localhost:5000/";
+  baseUrl = environment.baseUrl;
   http: HttpClient = inject(HttpClient);
   authToken: string | null = null;
   user: Loggedinuser | null = null;

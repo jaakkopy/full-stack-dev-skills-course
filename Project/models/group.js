@@ -15,6 +15,8 @@ const Groupchema = mongoose.Schema({
     }
 });
 
+const Group = module.exports = mongoose.model('Group', Groupchema);
+
 const validateNewGroupData = (newGroupData) => {
     if (!newGroupData?.name || !newGroupData?.password)
         throw new ValidationError("name and password should be defined and non-empty");
@@ -31,5 +33,14 @@ const createGroup = async (creator, newGroupData) => {
     await user.save();
 }
 
-const Group = module.exports = mongoose.model('Group', Groupchema);
+const getUserGroupInfo = async (user) => {
+    const groups = await Group.find({ _id: { $in: user.groups } });
+    let toReturn = []
+    groups.forEach(g => {
+        toReturn.push({id: g._id, name: g.name});
+    });
+    return toReturn;
+}
+
 module.exports.createGroup = createGroup;
+module.exports.getUserGroupInfo = getUserGroupInfo;

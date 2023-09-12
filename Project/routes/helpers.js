@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const successMsg = (msg) => {
-    return {success: true, msg};
+const successResponse = (content) => {
+    return {success: true, content};
 }
 
-const failureMsg = (msg) => {
-    return {success: false, msg};
+const failureResponse = (content) => {
+    return {success: false, content};
 }
 
 const signJwtWithUserObject = (user) => {
@@ -30,4 +30,4 @@ const createJwtResponse = (token, user) => {
     };
 }
 
-module.exports = {successMsg, failureMsg, signJwtWithUserObject, createJwtResponse};
+module.exports = {successResponse, failureResponse, signJwtWithUserObject, createJwtResponse};

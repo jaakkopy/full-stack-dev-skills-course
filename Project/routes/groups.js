@@ -9,7 +9,7 @@ const router = Router();
 router.post('/create', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         await Group.createGroup(req.user, req.body);
-        res.status(200).json(helpers.successMsg("New group created"));
+        res.status(200).json(helpers.successResponse("New group created"));
     } catch (err) {
         let status;
         let msg;
@@ -24,7 +24,17 @@ router.post('/create', passport.authenticate('jwt', {session: false}), async (re
             status = 500;
             msg = "Internal server error";
         }
-        res.status(status).json(helpers.failureMsg(msg));
+        res.status(status).json(helpers.failureResponse(msg));
+    }
+});
+
+router.get('/usergroups', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const groups = await Group.getUserGroupInfo(req.user);
+        res.status(200).json(helpers.successResponse(groups));
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json(helpers.failureResponse('Internal server error'));
     }
 });
 

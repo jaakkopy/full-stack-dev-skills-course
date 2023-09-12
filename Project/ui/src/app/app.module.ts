@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { GroupsComponent } from './components/groups/groups.component';
+import { GroupService } from './services/group.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
     NavbarComponent,
     HomeComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    GroupsComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [ValidateService, AuthService],
+  providers: [ValidateService, AuthService, GroupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

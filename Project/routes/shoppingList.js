@@ -9,7 +9,7 @@ const router = Router();
 router.post('/create', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         await ShoppingList.createList(req.body, req.user);
-        res.status(200).json(helpers.successMsg("New list created"));
+        res.status(200).json(helpers.successResponse("New list created"));
     } catch (err) {
         let status;
         let msg;
@@ -21,7 +21,7 @@ router.post('/create', passport.authenticate('jwt', {session: false}), async (re
             status = 500;
             msg = "Internal server error";
         }
-        res.status(status).json(helpers.failureMsg(msg));
+        res.status(status).json(helpers.failureResponse(msg));
     }
 });
 

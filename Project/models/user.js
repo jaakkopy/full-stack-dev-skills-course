@@ -22,6 +22,8 @@ const UserSchema = mongoose.Schema({
     }
 });
 
+const User = module.exports = mongoose.model('User', UserSchema);
+
 const validateRegisterData = (userData) => {
     if (!userData?.username || !userData?.email || !userData?.password)
         throw new ValidationError("username, email, and password should be defined and non-empty");
@@ -44,7 +46,6 @@ const getUserById = async (id) => {
     return user;
 }
 
-const User = module.exports = mongoose.model('User', UserSchema);
 module.exports.registerUser = registerUser;
 module.exports.getUserById = getUserById;
 module.exports.getUserByUsername = getUserByUsername;

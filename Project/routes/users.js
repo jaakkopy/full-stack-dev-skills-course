@@ -2,13 +2,14 @@ const Router = require('express').Router;
 const User = require('../models/user.js');
 const helpers = require('./helpers.js');
 const ValidationError = require('../errors/validationError');
+const passport = require('passport');
 
 const router = Router();
 
 router.post('/register', async (req, res) => {
     try {
         await User.registerUser(req.body);
-        res.json(helpers.successMsg("user registered"));
+        res.json(helpers.successResponse("user registered"));
     } catch (err) {
         let status;
         let msg;
@@ -24,7 +25,7 @@ router.post('/register', async (req, res) => {
             status = 500;
             msg = "Internal server error";
         }
-        res.status(status).json(helpers.failureMsg(msg));
+        res.status(status).json(helpers.failureResponse(msg));
     }
 });
 
@@ -34,19 +35,21 @@ router.post('/authenticate', async (req, res) => {
     try {
         const user = await User.getUserByUsername(username);
         if (!user) {
-            return res.status(404).json(helpers.failureMsg('User not found'));
+            return res.status(404).json(helpers.failureResponse('User not found'));
         }
         const isMatch = await User.comparePassword(password, user.password);
         if (isMatch) {
             const {token, signWith} = helpers.signJwtWithUserObject(user);
             res.status(200).json(helpers.createJwtResponse(token, signWith));
         } else {
-            res.status(403).json(helpers.failureMsg('Incorrect credentials'));
+            res.status(403).json(helpers.failureResponse('Incorrect credentials'));
         }
     } catch (err) {
         console.error(err.message);
-        res.status(500).json(helpers.failureMsg('Internal server error'));
+        res.status(500).json(helpers.failureResponse('Internal server error'));
     }
 });
+
+
 
 module.exports = router;
