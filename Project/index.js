@@ -18,8 +18,9 @@ mongoose.connection.on('error', (err) => {
 
 const app = express();
 app.use(express.json());
-app.use('/users', require('./routes/users.js'));
-app.use('/groups', require('./routes/groups.js'));
+app.use('/users', require('./routes/users'));
+app.use('/groups', require('./routes/groups'));
+app.use('/lists', require('./routes/shoppingList'));
 
 app.get('/', (req, res) => {
     res.send("Hello");

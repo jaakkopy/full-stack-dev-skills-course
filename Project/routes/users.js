@@ -1,6 +1,7 @@
 const Router = require('express').Router;
 const User = require('../models/user.js');
 const helpers = require('./helpers.js');
+const ValidationError = require('../errors/validationError');
 
 const router = Router();
 
@@ -11,7 +12,7 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         let status;
         let msg;
-        if (err instanceof TypeError) {
+        if (err instanceof ValidationError) {
             status = 403;
             msg = err.message;
         // the duplicate key error is not a validator error: https://mongoosejs.com/docs/validation.html
@@ -19,6 +20,7 @@ router.post('/register', async (req, res) => {
             status = 403;
             msg = "The username or email are already taken";
         } else {
+            console.error(err.message);
             status = 500;
             msg = "Internal server error";
         }
@@ -42,7 +44,8 @@ router.post('/authenticate', async (req, res) => {
             res.status(403).json(helpers.failureMsg('Incorrect credentials'));
         }
     } catch (err) {
-        res.status(403).json(helpers.failureMsg('Authentication failed'));
+        console.error(err.message);
+        res.status(500).json(helpers.failureMsg('Internal server error'));
     }
 });
 

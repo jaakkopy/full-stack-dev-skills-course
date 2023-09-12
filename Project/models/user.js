@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const {hashPassword, comparePassword} = require('./authHelpers');
+const ValidationError = require('../errors/validationError');
 
 const UserSchema = mongoose.Schema({
     username: {
@@ -23,15 +24,11 @@ const UserSchema = mongoose.Schema({
 
 const validateRegisterData = (userData) => {
     if (!userData?.username || !userData?.email || !userData?.password)
-        return false;
-    if (userData.length == 0 || userData.email.length == 0 || userData.password.length == 0)
-        return false;
-    return true;
+        throw new ValidationError("username, email, and password should be defined and non-empty");
 }
 
 const registerUser = async (userData) => {
-    if (!validateRegisterData(userData))
-        throw TypeError("Invalid user data");
+    validateRegisterData(userData);
     userData.password = await hashPassword(userData.password);
     const toAdd = User(userData);
     await toAdd.save();

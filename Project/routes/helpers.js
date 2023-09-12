@@ -16,7 +16,7 @@ const signJwtWithUserObject = (user) => {
         password: user.password
     };
     const token = jwt.sign(signWith, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRATION
+        expiresIn: Number(process.env.JWT_EXPIRATION)
     });
     return {token, signWith};
 }

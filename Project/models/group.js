@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./user');
 const {hashPassword, comparePassword} = require('./authHelpers');
+const ValidationError = require('../errors/validationError');
 
 const Groupchema = mongoose.Schema({
     name: {
@@ -16,15 +17,11 @@ const Groupchema = mongoose.Schema({
 
 const validateNewGroupData = (newGroupData) => {
     if (!newGroupData?.name || !newGroupData?.password)
-        return false;
-    if (newGroupData.name.length == 0 || newGroupData.password.length == 0)
-        return false;
-    return true;
+        throw new ValidationError("name and password should be defined and non-empty");
 }
 
 const createGroup = async (creator, newGroupData) => {
-    if (!validateNewGroupData(newGroupData))
-        throw TypeError("Invalid group data");
+    validateNewGroupData(newGroupData);
     newGroupData.password = await hashPassword(newGroupData.password);
     const toAdd = Group(newGroupData);
     await toAdd.save();
