@@ -61,7 +61,7 @@ const validateNewListData = (newList, creator) => {
 }
 
 const createList = async (newList, creator) => {
-    values = validateNewListData(newList, creator);
+    const values = validateNewListData(newList, creator);
     const toAdd = ShoppingList({
         name: newList.name,
         date: values.date,
