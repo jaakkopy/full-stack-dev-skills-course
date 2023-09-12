@@ -45,21 +45,31 @@ const validateNewListData = (newList, creator) => {
     if (!newList?.name || !newList?.date || !newList?.group)
         throw new ValidationError("name, date, and group should be defined and non-empty");
     // check that the creator is part of the group
-    let belongsToGroup = false;
+    let groupId = null;
     for (let i = 0; i < creator.groups.length; ++i) {
         if (creator.groups[i].toString() === newList.group) {
-            belongsToGroup = true;
+            groupId = creator.groups[i];
             break;
         }
     }
-    if (!belongsToGroup)
+    if (groupId == null)
         throw new ValidationError("Must be a member of the group to create a list for that group");
+    const date = Date.parse(newList.date);
+    if (isNaN(date))
+        throw new ValidationError("Given date is not valid in the date time string format");
+    return {groupId, date}
 }
 
-const createList = (newList, creator) => {
-    console.log(newList);
-    console.log(creator);
-    validateNewListData(newList, creator);
+const createList = async (newList, creator) => {
+    values = validateNewListData(newList, creator);
+    const toAdd = ShoppingList({
+        name: newList.name,
+        date: values.date,
+        creator: creator.id,
+        group: values.groupId,
+        items: []
+    });
+    await toAdd.save();
 }
 
 const ShoppingList = module.exports = mongoose.model('ShoppingList', ShoppingListSchema);
