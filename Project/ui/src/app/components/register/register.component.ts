@@ -7,8 +7,7 @@ import { ValidateService } from 'src/app/services/validate.service';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  templateUrl: './register.component.html'
 })
 export class RegisterComponent {
   validateService: ValidateService = inject(ValidateService);  

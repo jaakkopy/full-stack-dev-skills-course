@@ -10,8 +10,8 @@ const ShoppingListSchema = mongoose.Schema({
         type: Date,
         require: true
     },
-    creator: {
-        type: mongoose.ObjectId,
+    creatorName: {
+        type: String,
         require: true
     },
     group: {
@@ -41,6 +41,8 @@ const ShoppingListSchema = mongoose.Schema({
     ]
 });
 
+const ShoppingList = module.exports = mongoose.model('ShoppingList', ShoppingListSchema);
+
 const validateNewListData = (newList, creator) => {
     if (!newList?.name || !newList?.date || !newList?.group)
         throw new ValidationError("name, date, and group should be defined and non-empty");
@@ -65,12 +67,27 @@ const createList = async (newList, creator) => {
     const toAdd = ShoppingList({
         name: newList.name,
         date: values.date,
-        creator: creator.id,
+        creator: creator.username,
         group: values.groupId,
         items: []
     });
     await toAdd.save();
 }
 
-const ShoppingList = module.exports = mongoose.model('ShoppingList', ShoppingListSchema);
+const getGroupsLists = async (groupData) => {
+    const lists = await ShoppingList.find({ group: { $in: groupData.id } });
+    let toReturn = [];
+    lists.forEach(l => {
+        toReturn.push({
+            name: l.name,
+            date: l.date,
+            creatorName: l.creatorName,
+            group: l.group,
+            items: l.items
+        });
+    });
+    return toReturn;
+}
+
 module.exports.createList = createList;
+module.exports.getGroupsLists = getGroupsLists;

@@ -5,8 +5,7 @@ import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.css']
+  templateUrl: './groups.component.html'
 })
 export class GroupsComponent {
   authService: AuthService = inject(AuthService);
@@ -17,6 +16,7 @@ export class GroupsComponent {
     // fetch group data for the logged in user
     const observable = this.groupService.getUserGroupData();
     if (observable == null) {
+      // TODO: notify of error
       return;
     }
     observable.subscribe(response => {

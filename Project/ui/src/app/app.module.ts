@@ -13,6 +13,7 @@ import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { GroupsComponent } from './components/groups/groups.component';
 import { GroupService } from './services/group.service';
+import { ListsComponent } from './components/lists/lists.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { GroupService } from './services/group.service';
     HomeComponent,
     RegisterComponent,
     LoginComponent,
-    GroupsComponent
+    GroupsComponent,
+    ListsComponent
   ],
   imports: [
     BrowserModule,

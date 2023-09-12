@@ -25,4 +25,14 @@ router.post('/create', passport.authenticate('jwt', {session: false}), async (re
     }
 });
 
+router.post('/listsofgroup', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const lists = await ShoppingList.getGroupsLists(req.body);
+        res.status(200).json(helpers.successResponse(lists));
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json(helpers.failureResponse("Internal server error"));
+    }
+});
+
 module.exports = router;
