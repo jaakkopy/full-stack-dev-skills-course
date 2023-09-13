@@ -15,7 +15,7 @@ export class ListComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   listId: string | null = null;
   selectedItemId: string | null = null;
-  newItemForm = new FormGroup({
+  itemForm = new FormGroup({
     name: new FormControl(''),
     quantity: new FormControl(0),
     price: new FormControl(0),
@@ -46,7 +46,7 @@ export class ListComponent {
   }
 
   onNewItemSubmit() {
-    if (!this.newItemForm.value?.name || !this.newItemForm.value?.quantity) {
+    if (!this.itemForm.value?.name || !this.itemForm.value?.quantity) {
       // Todo: notify of error
       return;
     }
@@ -55,11 +55,11 @@ export class ListComponent {
       return;
     }
     const newItem: NewShoppingListItem = {
-      name: this.newItemForm.value.name,
-      quantity: this.newItemForm.value.quantity,
-      price: this.newItemForm.value?.price,
-      category: this.newItemForm.value?.category,
-      comment: this.newItemForm.value?.comment
+      name: this.itemForm.value.name,
+      quantity: this.itemForm.value.quantity,
+      price: this.itemForm.value?.price,
+      category: this.itemForm.value?.category,
+      comment: this.itemForm.value?.comment
     };
     const observable = this.listService.postNewItem(this.listId, newItem);
     if (observable == null) {
@@ -102,6 +102,25 @@ export class ListComponent {
     observable.subscribe(response => {
       if (response.success && this.list != null) {
         this.list.items = this.list.items.filter(i => i._id !== this.selectedItemId);
+        // TODO: notify of success
+      } else {
+        // TODO: notify of failure
+      }
+    })
+  }
+
+  onItemUpdated() {
+    if (this.selectedItemId === null || this.list == null) {
+      // TODO: notify
+      return;
+    }
+    const observable = this.listService.updateListItem(this.list.id, this.selectedItemId, this.itemForm.value);
+    if (observable == null) {
+      // TODO: notify of failure
+      return;
+    }
+    observable.subscribe(response => {
+      if (response.success && this.list != null) {
         // TODO: notify of success
       } else {
         // TODO: notify of failure

@@ -1,14 +1,16 @@
 <div *ngIf="list != null">
     <h1>{{list.name}}</h1>
-    <p>{{list.date}}</p>
-    <p>Created by {{list.creatorName}}</p>
+    <div>
+        <p>{{list.date}}</p>
+        <p>Created by {{list.creatorName}}</p>
+    </div>
     <div class="dropdown">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-            aria-expanded="false" aria-controls="collapseExample">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1"
+            aria-expanded="false" aria-controls="collapse1">
             Add an item
         </button>
-        <div class="collapse" id="collapseExample">
-            <form id="new-item-form" (submit)="onNewItemSubmit()" [formGroup]="newItemForm">
+        <div class="collapse" id="collapse1">
+            <form id="new-item-form" (submit)="onItemUpdated()" [formGroup]="itemForm">
                 <div class="form-group">
                     <label>Item name</label>
                     <input type="text" class="form-control" formControlName="name">
@@ -29,11 +31,12 @@
                     <label>Comment (optional)</label>
                     <input type="text" class="form-control" formControlName="comment">
                 </div>
-                <input data-bs-toggle="collapse" data-bs-target="#collapseExample" type="submit" class="btn btn-primary"
+                <input data-bs-toggle="collapse" data-bs-target="#collapse1" type="submit" class="btn btn-primary"
                     value="Add">
             </form>
         </div>
     </div>
+
     <h2>Items</h2>
     <ul class="list-group" *ngFor="let item of list.items">
         <li id={{item._id}} (click)="setSelectedListItem(item._id)" class="list-group-item d-flex justify-content-between align-items-start">
@@ -54,6 +57,40 @@
             </div>
         </li>
     </ul>
-    <button>Edit</button>
+    
     <button (click)="deleteSelectedItem()">Delete</button>
+
+    <div class="dropdown">
+        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse2"
+            aria-expanded="false" aria-controls="collapse2">
+            Edit 
+        </button>
+        <div class="collapse" id="collapse2">
+            <form id="new-item-form" (submit)="onItemUpdated()" [formGroup]="itemForm">
+                <div class="form-group">
+                    <label>Item name</label>
+                    <input type="text" class="form-control" formControlName="name">
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" formControlName="quantity">
+                </div>
+                <div class="form-group">
+                    <label>Price (optional)</label>
+                    <input type="number" class="form-control" formControlName="price">
+                </div>
+                <div class="form-group">
+                    <label>Category (optional)</label>
+                    <input type="text" class="form-control" formControlName="category">
+                </div>
+                <div class="form-group">
+                    <label>Comment (optional)</label>
+                    <input type="text" class="form-control" formControlName="comment">
+                </div>
+                <input data-bs-toggle="collapse" data-bs-target="#collapse2" type="submit" class="btn btn-primary"
+                    value="Modify values">
+            </form>
+        </div>
+    </div>
+
 </div>

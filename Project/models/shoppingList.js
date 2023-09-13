@@ -118,8 +118,8 @@ const validateNewItemData = (newItem) => {
         throw new ValidationError("name and quantity should be defined and non-empty");
 }
 
-const addToList = async (user, newItemData) => {
-    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(newItemData.listId)}); 
+const addToList = async (user, listId, newItemData) => {
+    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listId)}); 
     if (user.groups.indexOf(list.group) === -1)
         throw new ValidationError("Not a member of that group")
     validateNewItemData(newItemData);
@@ -142,8 +142,27 @@ const deleteItemFromList = async (user, listid, itemid) => {
     list.save();
 }
 
+const updateListItem = async (user, listid, itemid, newValues) => {
+    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listid)}); 
+    if (user.groups.indexOf(list.group) === -1)
+        throw new ValidationError("Not a member of that group")
+    let item = list.items.find(i => i._id.toString() == itemid);
+    if (newValues.name)
+        item.name = newValues.name;
+    if (newValues.quantity)
+        item.quantity = newValues.quantity;
+    if (newValues.price)
+        item.price = newValues.price;
+    if (newValues.category)
+        item.category = newValues.category;
+    if (newValues.comment)
+        item.comment = newValues.comment;
+    list.save();
+}
+
 module.exports.createList = createList;
 module.exports.getGroupsLists = getGroupsLists;
 module.exports.getListById = getListById;
 module.exports.addToList = addToList;
 module.exports.deleteItemFromList = deleteItemFromList;
+module.exports.updateListItem = updateListItem;
