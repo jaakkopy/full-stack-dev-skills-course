@@ -47,4 +47,13 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), async (req,
     }
 });
 
+router.post('/add', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        await ShoppingList.addToList(req.user, req.body);
+        res.status(200).json(helpers.successResponse("New item added"));
+    } catch (err) {
+        handleError(err, res);
+    }
+});
+
 module.exports = router;

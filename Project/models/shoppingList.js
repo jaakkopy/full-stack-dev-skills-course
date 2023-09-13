@@ -29,7 +29,7 @@ const ShoppingListSchema = mongoose.Schema({
                 require: true,
             },
             price: {
-                type: String,
+                type: Number,
             },
             category: {
                 type: String
@@ -99,6 +99,8 @@ const getGroupsLists = async (user, groupIdString) => {
 
 const getListById = async (user, listId) => {
     const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listId)}); 
+    if (list == null)
+        throw ValidationError("No such group exists")
     if (user.groups.indexOf(list.group) === -1)
         throw ValidationError("Not a member of that group")
     const toReturn = {
@@ -111,6 +113,28 @@ const getListById = async (user, listId) => {
     return toReturn;
 }
 
+const validateNewItemData = (newItem) => {
+    if (!newItem?.name || !newItem?.quantity)
+        throw new ValidationError("name and quantity should be defined and non-empty");
+}
+
+const addToList = async (user, newItemData) => {
+    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(newItemData.listId)}); 
+    if (user.groups.indexOf(list.group) === -1)
+        throw new ValidationError("Not a member of that group")
+    validateNewItemData(newItemData);
+    const toAdd = {
+        name: newItemData.name,
+        quantity: newItemData.quantity,
+        price: newItemData?.price,
+        category: newItemData?.category,
+        comment: newItemData?.comment
+    }
+    list.items.push(toAdd);
+    await list.save();
+}
+
 module.exports.createList = createList;
 module.exports.getGroupsLists = getGroupsLists;
 module.exports.getListById = getListById;
+module.exports.addToList = addToList;
