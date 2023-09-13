@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { NewShoppingListItem } from '../interfaces/new-shopping-list-item';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,17 @@ export class ListService {
       'Authorization': token
     });
     return this.http.get(`${this.baseUrl}lists/${listId}`, { headers: headers });
+  }
+
+  postNewItem(listId: String, newItem: NewShoppingListItem): null | Observable<any> {
+    const token = localStorage.getItem('id_token');
+    if (token == null) {
+      return null;
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+    return this.http.post(`${this.baseUrl}lists/add`, {listId, ...newItem}, { headers: headers });
   }
 }
