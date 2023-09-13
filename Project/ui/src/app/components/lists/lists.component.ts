@@ -1,6 +1,6 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Shoppinglist } from 'src/app/interfaces/shoppinglist';
+import { ShoppingListIdentifier } from 'src/app/interfaces/shoppingListIdentifier';
 import { ListService } from 'src/app/services/list.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { ListService } from 'src/app/services/list.service';
   templateUrl: './lists.component.html'
 })
 export class ListsComponent {
-  lists: [Shoppinglist] = [{id: '', name: ''}];
+  lists: [ShoppingListIdentifier] = [{id: '', name: ''}];
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
   groupId: String | null = null;

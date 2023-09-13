@@ -1,1 +1,10 @@
-<p>list works!</p>
+<div *ngIf="list != null">
+    <h1>{{list.name}}</h1>
+    <p>{{list.date}}</p>
+    <p>Created by {{list.creatorName}}</p>
+    <button>Add an item</button>
+    <h2>Items</h2>
+    <ul *ngFor="let item of list.items">
+        <li>{{item.name}}: {{item.quantity}}x</li>
+    </ul>
+</div>
