@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
@@ -12,6 +13,13 @@ export class ListComponent {
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
   listId: String | null = null;
+  newItemForm = new FormGroup({
+    name: new FormControl(''),
+    quantity: new FormControl(0),
+    price: new FormControl(0),
+    category: new FormControl(''),
+    comment: new FormControl(''),
+  });
 
   ngOnInit() {
     this.listId = this.route.snapshot.params['listid']
@@ -33,5 +41,9 @@ export class ListComponent {
         // TODO: notify of error
       }
     });
+  }
+
+  onNewItemSubmit() {
+    console.log(this.newItemForm.value);
   }
 }
