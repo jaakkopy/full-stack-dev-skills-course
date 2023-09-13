@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { GroupsComponent } from './components/groups/groups.component';
 import { GroupService } from './services/group.service';
 import { ListsComponent } from './components/lists/lists.component';
+import { ListComponent } from './components/list/list.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ListsComponent } from './components/lists/lists.component';
     RegisterComponent,
     LoginComponent,
     GroupsComponent,
-    ListsComponent
+    ListsComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,

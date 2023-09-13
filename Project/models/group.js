@@ -11,7 +11,7 @@ const Groupchema = mongoose.Schema({
     },
     password: {
         type: String,
-        require: true
+        required: true
     }
 });
 

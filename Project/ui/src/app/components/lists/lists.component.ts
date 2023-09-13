@@ -8,7 +8,7 @@ import { ListService } from 'src/app/services/list.service';
   templateUrl: './lists.component.html'
 })
 export class ListsComponent {
-  lists: [Shoppinglist] | [] = [];
+  lists: [Shoppinglist] = [{id: '', name: ''}];
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
   groupId: String | null = null;

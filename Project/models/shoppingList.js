@@ -4,19 +4,19 @@ const ValidationError = require('../errors/validationError');
 const ShoppingListSchema = mongoose.Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
     },
     date: {
         type: Date,
-        require: true
+        required: true
     },
     creatorName: {
         type: String,
-        require: true
+        required: true
     },
     group: {
         type: mongoose.ObjectId,
-        require: true
+        required: true
     },
     items: [
         {
@@ -67,7 +67,7 @@ const createList = async (newList, creator) => {
     const toAdd = ShoppingList({
         name: newList.name,
         date: values.date,
-        creator: creator.username,
+        creatorName: creator.username,
         group: values.groupId,
         items: []
     });
@@ -97,5 +97,20 @@ const getGroupsLists = async (user, groupIdString) => {
     return toReturn;
 }
 
+const getListById = async (user, listId) => {
+    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listId)}); 
+    if (user.groups.indexOf(list.group) === -1)
+        throw ValidationError("Not a member of that group")
+    const toReturn = {
+        id: list._id,
+        creatorName: list.creatorName,
+        name: list.name,
+        date: list.date,
+        items: list.items
+    }
+    return toReturn;
+}
+
 module.exports.createList = createList;
 module.exports.getGroupsLists = getGroupsLists;
+module.exports.getListById = getListById;

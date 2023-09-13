@@ -23,4 +23,16 @@ export class ListService {
     });
     return this.http.get(`${this.baseUrl}lists/listsofgroup/${groupId}`, { headers: headers });
   }
+
+  getListData(listId: String): null | Observable<any> {
+    const token = localStorage.getItem('id_token');
+    if (token == null) {
+      return null;
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+    return this.http.get(`${this.baseUrl}lists/${listId}`, { headers: headers });
+  }
 }
