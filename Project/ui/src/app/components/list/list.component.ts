@@ -13,7 +13,8 @@ export class ListComponent {
   list: ShoppingList | null = null;
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
-  listId: String | null = null;
+  listId: string | null = null;
+  selectedItemId: string | null = null;
   newItemForm = new FormGroup({
     name: new FormControl(''),
     quantity: new FormControl(0),
@@ -73,5 +74,38 @@ export class ListComponent {
         // TODO: notify of error
       }
     });
+  }
+
+  // Set the id of the selected item. Add the active class to the selected item to visualize the selection for the user
+  setSelectedListItem(itemId: string) {
+    const element = document.getElementById(itemId);
+    if (this.selectedItemId != null) {
+      const previousSelected = document.getElementById(this.selectedItemId);
+      previousSelected?.setAttribute('aria-current', 'false');
+      previousSelected?.classList.remove('active')
+    }
+    element?.setAttribute('aria-current', 'true');
+    element?.classList.add('active');
+    this.selectedItemId = itemId;
+  }
+
+  deleteSelectedItem() {
+    if (this.selectedItemId === null || this.list == null) {
+      // TODO: notify
+      return;
+    }
+    const observable = this.listService.deleteItem(this.list.id, this.selectedItemId);
+    if (observable == null) {
+      // TODO: notify of failure
+      return;
+    }
+    observable.subscribe(response => {
+      if (response.success && this.list != null) {
+        this.list.items = this.list.items.filter(i => i._id !== this.selectedItemId);
+        // TODO: notify of success
+      } else {
+        // TODO: notify of failure
+      }
+    })
   }
 }

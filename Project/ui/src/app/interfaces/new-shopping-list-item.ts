@@ -1,7 +1,7 @@
 export interface NewShoppingListItem {
-    name: String;
-    quantity: Number;
-    price: Number | null | undefined;
-    category: String | null | undefined;
-    comment: String | null | undefined;
+    name: string;
+    quantity: number;
+    price: number | null | undefined;
+    category: string | null | undefined;
+    comment: string | null | undefined;
 }

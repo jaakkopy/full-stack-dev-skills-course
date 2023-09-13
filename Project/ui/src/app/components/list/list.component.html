@@ -29,12 +29,31 @@
                     <label>Comment (optional)</label>
                     <input type="text" class="form-control" formControlName="comment">
                 </div>
-                <input data-bs-toggle="collapse" data-bs-target="#collapseExample" type="submit" class="btn btn-primary" value="Add">
+                <input data-bs-toggle="collapse" data-bs-target="#collapseExample" type="submit" class="btn btn-primary"
+                    value="Add">
             </form>
         </div>
     </div>
     <h2>Items</h2>
-    <ul *ngFor="let item of list.items">
-        <li>{{item.name}}: {{item.quantity}}x</li>
+    <ul class="list-group" *ngFor="let item of list.items">
+        <li id={{item._id}} (click)="setSelectedListItem(item._id)" class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+                Item: {{item.name}}
+            </div>
+            <div class="ms-2 me-auto">
+                Quantity: {{item.quantity}}
+            </div>
+            <div *ngIf="item.price" class="ms-2 me-auto">
+                Price per item: {{item.price}}
+            </div>
+            <div *ngIf="item.category" class="ms-2 me-auto">
+                Category: {{item.category}}
+            </div>
+            <div *ngIf="item.comment" class="ms-2 me-auto">
+                Comment: {{item.comment}}
+            </div>
+        </li>
     </ul>
+    <button>Edit</button>
+    <button (click)="deleteSelectedItem()">Delete</button>
 </div>

@@ -56,4 +56,13 @@ router.post('/add', passport.authenticate('jwt', { session: false }), async (req
     }
 });
 
+router.delete('/:listid/:itemid', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        await ShoppingList.deleteItemFromList(req.user, req.params.listid, req.params.itemid);
+        res.status(200).json(helpers.successResponse("Item deleted"));
+    } catch (err) {
+        handleError(err, res);
+    }
+});
+
 module.exports = router;

@@ -48,4 +48,16 @@ export class ListService {
     });
     return this.http.post(`${this.baseUrl}lists/add`, {listId, ...newItem}, { headers: headers });
   }
+
+  deleteItem(listId: string, itemId: string): null | Observable<any> {
+  const token = localStorage.getItem('id_token');
+    if (token == null) {
+      return null;
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token
+    });
+    return this.http.delete(`${this.baseUrl}lists/${listId}/${itemId}`, { headers: headers });
+  }
 }

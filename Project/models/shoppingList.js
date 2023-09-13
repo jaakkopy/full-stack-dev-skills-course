@@ -134,7 +134,16 @@ const addToList = async (user, newItemData) => {
     await list.save();
 }
 
+const deleteItemFromList = async (user, listid, itemid) => {
+    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listid)}); 
+    if (user.groups.indexOf(list.group) === -1)
+        throw new ValidationError("Not a member of that group")
+    list.items = list.items.filter(i => i._id.toString() !== itemid);
+    list.save();
+}
+
 module.exports.createList = createList;
 module.exports.getGroupsLists = getGroupsLists;
 module.exports.getListById = getListById;
 module.exports.addToList = addToList;
+module.exports.deleteItemFromList = deleteItemFromList;

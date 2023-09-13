@@ -1,7 +1,7 @@
 export interface ShoppingList {
-    id: String; 
-    creatorName: String,
-    name: String,
-    date: String,
-    items: [any] 
+    id: string; 
+    creatorName: string,
+    name: string,
+    date: string,
+    items: any[]
 }
