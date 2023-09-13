@@ -1,6 +1,6 @@
 <div>
     <h2>Your Groups:</h2>
     <ul *ngFor="let group of groupData">
-        <li>{{group.name}}</li>
+        <li *ngIf="group.id != ''"><a [routerLink]="['/lists', group.id]">{{group.name}}</a></li>
     </ul>
 </div>

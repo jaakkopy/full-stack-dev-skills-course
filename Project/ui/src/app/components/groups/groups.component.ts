@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Group } from 'src/app/interfaces/group';
-import { AuthService } from 'src/app/services/auth.service';
 import { GroupService } from 'src/app/services/group.service';
 
 @Component({
@@ -8,7 +7,6 @@ import { GroupService } from 'src/app/services/group.service';
   templateUrl: './groups.component.html'
 })
 export class GroupsComponent {
-  authService: AuthService = inject(AuthService);
   groupService: GroupService = inject(GroupService);
   groupData: [Group] = [{id: '', name: ''}];
   

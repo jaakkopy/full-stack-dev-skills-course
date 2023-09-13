@@ -58,7 +58,7 @@ const validateNewListData = (newList, creator) => {
         throw new ValidationError("Must be a member of the group to create a list for that group");
     const date = Date.parse(newList.date);
     if (isNaN(date))
-        throw new ValidationError("Given date is not valid in the date time string format");
+        throw new ValidationError("Given date is not valid in the date time string format (e.g YYYY-MM-DD)");
     return {groupId, date}
 }
 
@@ -74,16 +74,24 @@ const createList = async (newList, creator) => {
     await toAdd.save();
 }
 
-const getGroupsLists = async (groupData) => {
-    const lists = await ShoppingList.find({ group: { $in: groupData.id } });
+const getGroupsLists = async (user, groupIdString) => {
+    let groupId = null;
+    for (let i = 0; i < user.groups.length; ++i) {
+        if (user.groups[i].toString() === groupIdString) {
+            groupId = user.groups[i];
+            break;
+        }
+    }
+    if (groupId == null) {
+        throw new ValidationError("Not a member of that group");
+    }
+    const lists = await ShoppingList.find({ group: { $in:  groupId} });
     let toReturn = [];
     lists.forEach(l => {
         toReturn.push({
-            name: l.name,
-            date: l.date,
-            creatorName: l.creatorName,
-            group: l.group,
-            items: l.items
+            // return only the ids and names of the lists. Additional information will be fetched from a different route
+            id: l._id,
+            name: l.name
         });
     });
     return toReturn;
