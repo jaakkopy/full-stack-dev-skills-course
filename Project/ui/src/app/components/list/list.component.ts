@@ -121,6 +121,20 @@ export class ListComponent {
     }
     observable.subscribe(response => {
       if (response.success && this.list != null) {
+        let item = this.list.items.find(i => i._id === this.selectedItemId);
+        const vals = this.itemForm.value;
+        if (item && vals) {
+          if (vals.name)
+            item.name = vals.name;
+          if (vals.quantity)
+            item.quantity = vals.quantity;
+          if (vals.price)
+            item.price = vals.price;
+          if (vals.category)
+            item.category = vals.category;
+          if (vals.comment)
+            item.comment = vals.comment;
+        }
         // TODO: notify of success
       } else {
         // TODO: notify of failure

@@ -97,12 +97,17 @@ const getGroupsLists = async (user, groupIdString) => {
     return toReturn;
 }
 
-const getListById = async (user, listId) => {
+const getList = async (user, listId) => {
     const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listId)}); 
     if (list == null)
-        throw ValidationError("No such group exists")
+        throw ValidationError("No such list exists")
     if (user.groups.indexOf(list.group) === -1)
         throw ValidationError("Not a member of that group")
+    return list
+}
+
+const getListById = async (user, listId) => {
+    const list = await getList(user, listId);
     const toReturn = {
         id: list._id,
         creatorName: list.creatorName,
@@ -119,9 +124,7 @@ const validateNewItemData = (newItem) => {
 }
 
 const addToList = async (user, listId, newItemData) => {
-    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listId)}); 
-    if (user.groups.indexOf(list.group) === -1)
-        throw new ValidationError("Not a member of that group")
+    const list = await getList(user, listId);
     validateNewItemData(newItemData);
     const toAdd = {
         name: newItemData.name,
@@ -135,18 +138,16 @@ const addToList = async (user, listId, newItemData) => {
 }
 
 const deleteItemFromList = async (user, listid, itemid) => {
-    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listid)}); 
-    if (user.groups.indexOf(list.group) === -1)
-        throw new ValidationError("Not a member of that group")
+    const list = await getList(user, listid);
     list.items = list.items.filter(i => i._id.toString() !== itemid);
     list.save();
 }
 
 const updateListItem = async (user, listid, itemid, newValues) => {
-    const list = await ShoppingList.findOne({_id: new mongoose.Types.ObjectId(listid)}); 
-    if (user.groups.indexOf(list.group) === -1)
-        throw new ValidationError("Not a member of that group")
+    const list = await getList(user, listid);
     let item = list.items.find(i => i._id.toString() == itemid);
+    if (item === -1)
+        throw new ValidationError("No item with that id exists");
     if (newValues.name)
         item.name = newValues.name;
     if (newValues.quantity)
