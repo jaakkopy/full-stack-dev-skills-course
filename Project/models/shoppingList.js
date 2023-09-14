@@ -41,7 +41,7 @@ const ShoppingListSchema = mongoose.Schema({
     items: [ShoppingListItemSchema]
 });
 
-const ShoppingListItem = mongoose.model('ShoppingListItem', ShoppingListSchema);
+const ShoppingListItem = mongoose.model('ShoppingListItem', ShoppingListItemSchema);
 const ShoppingList = module.exports = mongoose.model('ShoppingList', ShoppingListSchema);
 
 const validateNewListData = (newList, creator) => {
