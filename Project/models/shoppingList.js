@@ -89,9 +89,11 @@ const getGroupsLists = async (user, groupIdString) => {
     let toReturn = [];
     lists.forEach(l => {
         toReturn.push({
-            // return only the ids and names of the lists. Additional information will be fetched from a different route
+            // return only the basic information about the list. Items will be fetched from a different route
             id: l._id,
-            name: l.name
+            name: l.name,
+            date: l.date,
+            creatorName: l.creatorName
         });
     });
     return toReturn;
@@ -104,6 +106,11 @@ const getList = async (user, listId) => {
     if (user.groups.indexOf(list.group) === -1)
         throw ValidationError("Not a member of that group")
     return list
+}
+
+const deleteList = async (user, listId) => {
+    const list = await getList(user, listId);
+    await ShoppingList.deleteOne({_id: list._id});
 }
 
 const getListById = async (user, listId) => {
@@ -161,9 +168,12 @@ const updateListItem = async (user, listid, itemid, newValues) => {
     list.save();
 }
 
-module.exports.createList = createList;
-module.exports.getGroupsLists = getGroupsLists;
-module.exports.getListById = getListById;
-module.exports.addToList = addToList;
-module.exports.deleteItemFromList = deleteItemFromList;
-module.exports.updateListItem = updateListItem;
+module.exports = {
+    createList,
+    deleteList,
+    getGroupsLists,
+    getListById,
+    addToList,
+    deleteItemFromList,
+    updateListItem
+};

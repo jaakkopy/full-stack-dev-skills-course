@@ -61,7 +61,7 @@ export class ListComponent {
       category: this.itemForm.value?.category,
       comment: this.itemForm.value?.comment
     };
-    const observable = this.listService.postNewItem(this.listId, newItem);
+    const observable = this.listService.postNewListItem(this.listId, newItem);
     if (observable == null) {
       // Todo: notify of error
       return;
@@ -94,7 +94,7 @@ export class ListComponent {
       // TODO: notify
       return;
     }
-    const observable = this.listService.deleteItem(this.list.id, this.selectedItemId);
+    const observable = this.listService.deleteListItem(this.list.id, this.selectedItemId);
     if (observable == null) {
       // TODO: notify of failure
       return;

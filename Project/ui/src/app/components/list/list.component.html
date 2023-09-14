@@ -58,13 +58,15 @@
         </li>
     </ul>
     
-    <button (click)="deleteSelectedItem()">Delete</button>
-
-    <div class="dropdown">
+    <div class="btn-group">
+        <button (click)="deleteSelectedItem()">Delete</button>
         <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse2"
             aria-expanded="false" aria-controls="collapse2">
             Edit 
         </button>
+    </div>
+
+    <div class="dropdown">
         <div class="collapse" id="collapse2">
             <form id="new-item-form" (submit)="onItemUpdated()" [formGroup]="itemForm">
                 <div class="form-group">

@@ -29,6 +29,15 @@ router.post('/create', passport.authenticate('jwt', { session: false }), async (
     }
 });
 
+router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        await ShoppingList.deleteList(req.user, req.params.id);
+        res.status(200).json(helpers.successResponse("List deleted"));
+    } catch (err) {
+        handleError(err, res);
+    }
+});
+
 router.get('/groups/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const lists = await ShoppingList.getGroupsLists(req.user, req.params.id);

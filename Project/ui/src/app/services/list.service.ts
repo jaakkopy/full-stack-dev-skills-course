@@ -13,7 +13,7 @@ export class ListService {
 
   constructor() { }
 
-  getListsForGroup(groupId: String): null | Observable<any> {
+  private makeHeadersWithAuthField(): null | HttpHeaders {
     const token = localStorage.getItem('id_token');
     if (token == null) {
       return null;
@@ -22,54 +22,36 @@ export class ListService {
       'Content-Type': 'application/json',
       'Authorization': token
     });
-    return this.http.get(`${this.baseUrl}lists/groups/${groupId}`, { headers: headers });
+    return headers;
+  }
+
+  getListsForGroup(groupId: String): null | Observable<any> {
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}lists/groups/${groupId}`, { headers: headers });
   }
 
   getListData(listId: String): null | Observable<any> {
-    const token = localStorage.getItem('id_token');
-    if (token == null) {
-      return null;
-    }
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this.http.get(`${this.baseUrl}lists/${listId}`, { headers: headers });
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}lists/${listId}`, { headers: headers });
   }
 
-  postNewItem(listId: String, newItem: NewShoppingListItem): null | Observable<any> {
-    const token = localStorage.getItem('id_token');
-    if (token == null) {
-      return null;
-    }
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this.http.post(`${this.baseUrl}lists/${listId}`, newItem, { headers: headers });
+  deleteList(listId: string): null | Observable<any> {
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.delete(`${this.baseUrl}lists/${listId}`, { headers: headers });
   }
 
-  deleteItem(listId: string, itemId: string): null | Observable<any> {
-  const token = localStorage.getItem('id_token');
-    if (token == null) {
-      return null;
-    }
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this.http.delete(`${this.baseUrl}lists/${listId}/${itemId}`, { headers: headers });
+  postNewListItem(listId: String, newItem: NewShoppingListItem): null | Observable<any> {
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.post(`${this.baseUrl}lists/${listId}`, newItem, { headers: headers });
+  }
+
+  deleteListItem(listId: string, itemId: string): null | Observable<any> {
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.delete(`${this.baseUrl}lists/${listId}/${itemId}`, { headers: headers });
   }
 
   updateListItem(listId: string, itemId: string, newValues: any): null | Observable<any> {
-    const token = localStorage.getItem('id_token');
-    if (token == null) {
-      return null;
-    }
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this.http.put(`${this.baseUrl}lists/${listId}/${itemId}`, newValues, { headers: headers });
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.put(`${this.baseUrl}lists/${listId}/${itemId}`, newValues, { headers: headers });
   }
 }
