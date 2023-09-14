@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { makeHeadersWithAuthField } from './helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +13,18 @@ export class GroupService {
   
   constructor() {}
 
+  createGroup(name: string, password: string): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.post(`${this.baseUrl}groups/`, {name, password}, {headers: headers});
+  }
+
   getUserGroupData(): null | Observable<any> {
-    const token = localStorage.getItem('id_token');
-    if (token == null) {
-      return null;
-    }
-    const headers = new HttpHeaders({ 
-      'Content-Type': 'application/json', 
-      'Authorization': token
-    });
-    return this.http.get(`${this.baseUrl}groups/usergroups`, {headers: headers});
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}groups/`, {headers: headers});
+  }
+
+  deleteGroup(groupId: string): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.delete(`${this.baseUrl}groups/${groupId}`, {headers: headers});
   }
 }

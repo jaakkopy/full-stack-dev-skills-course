@@ -1,4 +1,6 @@
 import { Component, inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
 
@@ -8,8 +10,14 @@ import { GroupService } from 'src/app/services/group.service';
 })
 export class GroupsComponent {
   groupService: GroupService = inject(GroupService);
-  groupData: [Group] = [{id: '', name: ''}];
-  
+  groups: Group[] = [];
+  selectedItemId: string | null = null;
+  router: Router = inject(Router);
+  newGroupForm = new FormGroup({
+    name: new FormControl(''),
+    password: new FormControl('')
+  });
+
   ngOnInit() {
     // fetch group data for the logged in user
     const observable = this.groupService.getUserGroupData();
@@ -19,8 +27,54 @@ export class GroupsComponent {
     }
     observable.subscribe(response => {
       if (response.success) {
-        this.groupData = response.content;
+        this.groups = response.content;
       }
     });
+  }
+
+  setSelectedListItem(itemId: string) {
+    const element = document.getElementById(itemId);
+    if (this.selectedItemId != null) {
+      const previousSelected = document.getElementById(this.selectedItemId);
+      previousSelected?.setAttribute('aria-current', 'false');
+      previousSelected?.classList.remove('active')
+    }
+    element?.setAttribute('aria-current', 'true');
+    element?.classList.add('active');
+    this.selectedItemId = itemId;
+  }
+
+  deleteSelectedGroup() {
+    if (this.selectedItemId != null) {
+      this.groupService.deleteGroup(this.selectedItemId)?.subscribe(res => {
+        if (res?.success) {
+          this.groups = this.groups.filter(g => g.id !== this.selectedItemId);
+          // TODO: notify of success
+        } else {
+          // TODO: notify of failure 
+        }
+      });
+    }
+  }
+
+  showSelectedGroupsLists() {
+    if (this.selectedItemId) {
+      this.router.navigate(['/lists', this.selectedItemId]);
+    }
+  }
+
+  onNewGroupSubmission() {
+    console.log(this.newGroupForm.value);
+    if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
+      const name = this.newGroupForm.value.name;
+      const password = this.newGroupForm.value.password;
+      this.groupService.createGroup(name, password)?.subscribe(res => {
+        if (res.success) {
+          this.groups.push({name, id: res.content});
+        } else {
+          // TODO: notify of failure 
+        }
+      })
+    }
   }
 }

@@ -11,21 +11,11 @@ router.post('/register', async (req, res) => {
         await User.registerUser(req.body);
         res.json(helpers.successResponse("user registered"));
     } catch (err) {
-        let status;
-        let msg;
-        if (err instanceof ValidationError) {
-            status = 403;
-            msg = err.message;
-        // the duplicate key error is not a validator error: https://mongoosejs.com/docs/validation.html
-        } else if (err.message.indexOf('duplicate key error') !== -1) {
-            status = 403;
-            msg = "The username or email are already taken";
+        if (err.message.indexOf('duplicate key error') !== -1) {
+            res.status(403).json(helpers.failureResponse("The username or email are already taken"));
         } else {
-            console.error(err.message);
-            status = 500;
-            msg = "Internal server error";
+            helpers.handleError(err, res);
         }
-        res.status(status).json(helpers.failureResponse(msg));
     }
 });
 
@@ -34,22 +24,19 @@ router.post('/authenticate', async (req, res) => {
     const password = req.body.password;
     try {
         const user = await User.getUserByUsername(username);
-        if (!user) {
-            return res.status(404).json(helpers.failureResponse('User not found'));
-        }
+        if (!user)
+            throw new ValidationError('User not found')
         const isMatch = await User.comparePassword(password, user.password);
         if (isMatch) {
             const {token, signWith} = helpers.signJwtWithUserObject(user);
             res.status(200).json(helpers.createJwtResponse(token, signWith));
         } else {
-            res.status(403).json(helpers.failureResponse('Incorrect credentials'));
+            throw new ValidationError('Incorrect credentials')
         }
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json(helpers.failureResponse('Internal server error'));
+        helpers.handleError(err, res);
     }
 });
-
 
 
 module.exports = router;

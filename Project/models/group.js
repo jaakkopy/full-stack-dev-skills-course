@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./user');
-const {hashPassword, comparePassword} = require('./authHelpers');
+const {hashPassword} = require('./authHelpers');
 const ValidationError = require('../errors/validationError');
 
 const Groupchema = mongoose.Schema({
@@ -11,6 +11,10 @@ const Groupchema = mongoose.Schema({
     },
     password: {
         type: String,
+        required: true
+    },
+    creatorId: {
+        type: mongoose.ObjectId,
         required: true
     }
 });
@@ -25,12 +29,13 @@ const validateNewGroupData = (newGroupData) => {
 const createGroup = async (creator, newGroupData) => {
     validateNewGroupData(newGroupData);
     newGroupData.password = await hashPassword(newGroupData.password);
-    const toAdd = Group(newGroupData);
+    const toAdd = Group({creatorId: creator.id, ...newGroupData});
     await toAdd.save();
     // add the creator as a member of the group
     let user = await User.getUserById(creator.id);
     user.groups.push(toAdd._id);
     await user.save();
+    return toAdd._id;
 }
 
 const getUserGroupInfo = async (user) => {
@@ -42,5 +47,12 @@ const getUserGroupInfo = async (user) => {
     return toReturn;
 }
 
-module.exports.createGroup = createGroup;
-module.exports.getUserGroupInfo = getUserGroupInfo;
+const deleteGroup = async (user, groupId) => {
+    const group = user.groups.find(g => g._id.toString() === groupId);
+    if (group === -1) {
+        throw new ValidationError("Not a member of that group");
+    }
+    await Group.deleteOne({_id: group._id});
+}
+
+module.exports = {createGroup, getUserGroupInfo, deleteGroup};

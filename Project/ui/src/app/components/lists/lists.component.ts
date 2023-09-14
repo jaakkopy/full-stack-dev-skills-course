@@ -89,7 +89,6 @@ export class ListsComponent {
             date: date,
             items: [] 
           }
-          console.log(add);
           this.lists.push(add);
         } else {
           // TODO: notify of failure 

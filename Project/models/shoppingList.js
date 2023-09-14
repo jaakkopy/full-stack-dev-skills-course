@@ -150,7 +150,7 @@ const addToList = async (user, listId, newItemData) => {
 const deleteItemFromList = async (user, listid, itemid) => {
     const list = await getList(user, listid);
     list.items = list.items.filter(i => i._id.toString() !== itemid);
-    list.save();
+    await list.save();
 }
 
 const updateListItem = async (user, listid, itemid, newValues) => {
@@ -168,7 +168,7 @@ const updateListItem = async (user, listid, itemid, newValues) => {
         item.category = newValues.category;
     if (newValues.comment)
         item.comment = newValues.comment;
-    list.save();
+    await list.save();
 }
 
 module.exports = {

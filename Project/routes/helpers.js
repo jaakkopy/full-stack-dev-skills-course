@@ -30,4 +30,18 @@ const createJwtResponse = (token, user) => {
     };
 }
 
-module.exports = {successResponse, failureResponse, signJwtWithUserObject, createJwtResponse};
+const handleError = (err, res) => {
+    let status;
+    let msg;
+    if (err instanceof ValidationError) {
+        status = 403;
+        msg = err.message;
+    } else {
+        console.error(err.message);
+        status = 500;
+        msg = "Internal server error";
+    }
+    res.status(status).json(helpers.failureResponse(msg));
+}
+
+module.exports = {successResponse, failureResponse, signJwtWithUserObject, createJwtResponse, handleError};
