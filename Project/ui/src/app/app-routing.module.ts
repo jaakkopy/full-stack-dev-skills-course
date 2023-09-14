@@ -7,12 +7,14 @@ import { AuthRouteGuard } from './guards/auth.guard';
 import { GroupsComponent } from './components/groups/groups.component';
 import { ListsComponent } from './components/lists/lists.component';
 import { ListComponent } from './components/list/list.component';
+import { AllListsComponent } from './components/all-lists/all-lists.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthRouteGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [AuthRouteGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'lists', component: AllListsComponent, canActivate: [AuthRouteGuard]},
   {path: 'lists/:groupid', component: ListsComponent, canActivate: [AuthRouteGuard]},
   {path: 'list/:listid', component: ListComponent, canActivate: [AuthRouteGuard]}
 ];

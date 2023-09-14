@@ -5,6 +5,14 @@ const passport = require('passport');
 
 const router = Router();
 
+router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        const allLists = await ShoppingList.getLists(req.user);
+        res.status(200).json(helpers.successResponse(allLists));
+    } catch (err) {
+        helpers.handleError(err, res);
+    }
+});
 
 router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {

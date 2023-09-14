@@ -14,6 +14,11 @@ export class ListService {
 
   constructor() { }
 
+  getListsForUser(): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}lists`, { headers: headers });
+  }
+
   getListsForGroup(groupId: String): null | Observable<any> {
     const headers = makeHeadersWithAuthField();
     return headers == null ? null : this.http.get(`${this.baseUrl}lists/groups/${groupId}`, { headers: headers });

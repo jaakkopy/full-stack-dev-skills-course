@@ -15,6 +15,7 @@ import { GroupsComponent } from './components/groups/groups.component';
 import { GroupService } from './services/group.service';
 import { ListsComponent } from './components/lists/lists.component';
 import { ListComponent } from './components/list/list.component';
+import { AllListsComponent } from './components/all-lists/all-lists.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ListComponent } from './components/list/list.component';
     LoginComponent,
     GroupsComponent,
     ListsComponent,
-    ListComponent
+    ListComponent,
+    AllListsComponent
   ],
   imports: [
     BrowserModule,

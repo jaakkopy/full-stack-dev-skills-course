@@ -106,6 +106,23 @@ const getList = async (user, listId) => {
     return list
 }
 
+const getLists = async (user) => {
+    const groups = user.groups;
+    const lists = await ShoppingList.find({group: {$in: groups}});
+    let toReturn = [];
+    for (let i = 0; i < lists.length; ++i) {
+        toReturn.push({
+            id: lists[i]._id,
+            groupName: await Group.findOne({_id: lists[i].group._id}).name,
+            group: lists[i].group,
+            name: lists[i].name,
+            date: lists[i].date,
+            creatorName: lists[i].creatorName,
+        });
+    }
+    return toReturn;
+}
+
 const deleteList = async (user, listId) => {
     const list = await getList(user, listId);
     await ShoppingList.deleteOne({_id: list._id});
@@ -174,3 +191,4 @@ module.exports.getListById = getListById;
 module.exports.addToList = addToList;
 module.exports.deleteItemFromList = deleteItemFromList;
 module.exports.updateListItem = updateListItem;
+module.exports.getLists = getLists;
