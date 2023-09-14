@@ -13,4 +13,25 @@
 <div class="btn-group">
     <button type="button" (click)="deleteSelectedList()">Delete</button>
     <button type="button" (click)="showSelectedList()">Show</button>
+    <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-new-list"
+        aria-expanded="false" aria-controls="collapse-new-list">
+        Create 
+    </button>
 </div>
+
+<div class="dropdown">
+        <div class="collapse" id="collapse-new-list">
+            <form id="new-list-form" (submit)="onNewListSubmission()" [formGroup]="newListForm">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" formControlName="name">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="text" class="form-control" formControlName="date">
+                </div>
+                <input data-bs-toggle="collapse" data-bs-target="#collapse-new-list" type="submit" class="btn btn-primary"
+                    value="Create">
+            </form>
+        </div>
+    </div>

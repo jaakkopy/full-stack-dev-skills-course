@@ -20,10 +20,10 @@ const handleError = (err, res) => {
     res.status(status).json(helpers.failureResponse(msg));
 }
 
-router.post('/create', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
-        await ShoppingList.createList(req.body, req.user);
-        res.status(200).json(helpers.successResponse("New list created"));
+        const newListId = await ShoppingList.createList(req.body, req.user);
+        res.status(200).json(helpers.successResponse(newListId));
     } catch (err) {
         handleError(err, res);
     }
@@ -58,8 +58,8 @@ router.get('/:listid', passport.authenticate('jwt', { session: false }), async (
 
 router.post('/:listid', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
-        await ShoppingList.addToList(req.user, req.params.listid, req.body);
-        res.status(200).json(helpers.successResponse("New item added"));
+        const newItemId = await ShoppingList.addToList(req.user, req.params.listid, req.body);
+        res.status(200).json(helpers.successResponse(newItemId));
     } catch (err) {
         handleError(err, res);
     }

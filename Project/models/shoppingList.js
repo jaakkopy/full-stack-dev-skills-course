@@ -1,6 +1,26 @@
 const mongoose = require('mongoose');
 const ValidationError = require('../errors/validationError');
 
+const ShoppingListItemSchema = mongoose.Schema({
+    name: {
+        type: String,
+        require: true,
+    },
+    quantity: {
+        type: Number,
+        require: true,
+    },
+    price: {
+        type: Number,
+    },
+    category: {
+        type: String
+    },
+    comment: {
+        type: String
+    }
+});
+
 const ShoppingListSchema = mongoose.Schema({
     name: {
         type: String,
@@ -18,29 +38,10 @@ const ShoppingListSchema = mongoose.Schema({
         type: mongoose.ObjectId,
         required: true
     },
-    items: [
-        {
-            name: {
-                type: String,
-                require: true,
-            },
-            quantity: {
-                type: Number,
-                require: true,
-            },
-            price: {
-                type: Number,
-            },
-            category: {
-                type: String
-            },
-            comment: {
-                type: String
-            }
-        }
-    ]
+    items: [ShoppingListItemSchema]
 });
 
+const ShoppingListItem = mongoose.model('ShoppingListItem', ShoppingListSchema);
 const ShoppingList = module.exports = mongoose.model('ShoppingList', ShoppingListSchema);
 
 const validateNewListData = (newList, creator) => {
@@ -72,6 +73,7 @@ const createList = async (newList, creator) => {
         items: []
     });
     await toAdd.save();
+    return toAdd._id;
 }
 
 const getGroupsLists = async (user, groupIdString) => {
@@ -133,15 +135,16 @@ const validateNewItemData = (newItem) => {
 const addToList = async (user, listId, newItemData) => {
     const list = await getList(user, listId);
     validateNewItemData(newItemData);
-    const toAdd = {
+    const toAdd = ShoppingListItem({
         name: newItemData.name,
         quantity: newItemData.quantity,
         price: newItemData?.price,
         category: newItemData?.category,
         comment: newItemData?.comment
-    }
+    });
     list.items.push(toAdd);
     await list.save();
+    return toAdd._id;
 }
 
 const deleteItemFromList = async (user, listid, itemid) => {

@@ -68,7 +68,7 @@ export class ListComponent {
     }
     observable.subscribe(response => {
       if (response?.success) {
-        this.list?.items.push(newItem);
+        this.list?.items.push({_id: response.content, ...newItem});
         // TODO: notify of successful addition
       } else {
         // TODO: notify of error

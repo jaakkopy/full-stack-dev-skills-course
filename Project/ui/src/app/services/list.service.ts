@@ -35,6 +35,11 @@ export class ListService {
     return headers == null ? null : this.http.get(`${this.baseUrl}lists/${listId}`, { headers: headers });
   }
 
+  createList(groupId: string, name: string, date: string): null | Observable<any> {
+    const headers = this.makeHeadersWithAuthField();
+    return headers == null ? null : this.http.post(`${this.baseUrl}lists`, {group: groupId, name, date}, { headers: headers });
+  }
+
   deleteList(listId: string): null | Observable<any> {
     const headers = this.makeHeadersWithAuthField();
     return headers == null ? null : this.http.delete(`${this.baseUrl}lists/${listId}`, { headers: headers });

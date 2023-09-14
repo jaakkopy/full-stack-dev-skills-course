@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
-import { ShoppingListIdentifier } from 'src/app/interfaces/shoppingListIdentifier';
 import { ListService } from 'src/app/services/list.service';
 
 @Component({
@@ -13,8 +13,13 @@ export class ListsComponent {
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
   router: Router = inject(Router);
-  groupId: String | null = null;
+  groupId: string | null = null;
   selectedItemId: string | null = null;
+  
+  newListForm = new FormGroup({
+    name: new FormControl(''),
+    date: new FormControl('')
+  });
 
   ngOnInit() {
     this.groupId = this.route.snapshot.params['groupid']
@@ -66,6 +71,30 @@ export class ListsComponent {
           // TODO: notify of failure 
         }
       });
+    }
+  }
+
+  onNewListSubmission() {
+    if (this.groupId && this.newListForm.value.name && this.newListForm.value.date) {
+      const name = this.newListForm.value.name;
+      const date = this.newListForm.value.date;
+      this.listService.createList(this.groupId, name, date)?.subscribe(res => {
+        if (res.success) {
+          // TODO: notify of success
+          const user = JSON.parse(localStorage.getItem('user')!);
+          const add = {
+            id: res.content,
+            creatorName: user.username,
+            name: name,
+            date: date,
+            items: [] 
+          }
+          console.log(add);
+          this.lists.push(add);
+        } else {
+          // TODO: notify of failure 
+        }
+      })
     }
   }
 
