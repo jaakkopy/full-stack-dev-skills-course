@@ -64,11 +64,24 @@ export class GroupsComponent {
   }
 
   onNewGroupSubmission() {
-    console.log(this.newGroupForm.value);
     if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
       const name = this.newGroupForm.value.name;
       const password = this.newGroupForm.value.password;
       this.groupService.createGroup(name, password)?.subscribe(res => {
+        if (res.success) {
+          this.groups.push({name, id: res.content});
+        } else {
+          // TODO: notify of failure 
+        }
+      })
+    }
+  }
+
+  onJoinGroupSubmission() {
+  if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
+      const name = this.newGroupForm.value.name;
+      const password = this.newGroupForm.value.password;
+      this.groupService.joinGroup(name, password)?.subscribe(res => {
         if (res.success) {
           this.groups.push({name, id: res.content});
         } else {

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const ValidationError = require('../errors/validationError');
 
 const successResponse = (content) => {
     return {success: true, content};
@@ -41,7 +42,7 @@ const handleError = (err, res) => {
         status = 500;
         msg = "Internal server error";
     }
-    res.status(status).json(helpers.failureResponse(msg));
+    res.status(status).json(failureResponse(msg));
 }
 
 module.exports = {successResponse, failureResponse, signJwtWithUserObject, createJwtResponse, handleError};

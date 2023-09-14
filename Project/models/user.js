@@ -46,4 +46,7 @@ const getUserById = async (id) => {
     return user;
 }
 
-module.exports = {registerUser, getUserById, getUserByUsername, comparePassword};
+module.exports.registerUser = registerUser;
+module.exports.getUserById = getUserById; 
+module.exports.getUserByUsername = getUserByUsername;
+module.exports.comparePassword = comparePassword;

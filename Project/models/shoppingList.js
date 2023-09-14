@@ -171,12 +171,10 @@ const updateListItem = async (user, listid, itemid, newValues) => {
     await list.save();
 }
 
-module.exports = {
-    createList,
-    deleteList,
-    getGroupsLists,
-    getListById,
-    addToList,
-    deleteItemFromList,
-    updateListItem
-};
+module.exports.createList = createList;
+module.exports.deleteList = deleteList;
+module.exports.getGroupsLists = getGroupsLists;
+module.exports.getListById = getListById;
+module.exports.addToList = addToList;
+module.exports.deleteItemFromList = deleteItemFromList;
+module.exports.updateListItem = updateListItem;

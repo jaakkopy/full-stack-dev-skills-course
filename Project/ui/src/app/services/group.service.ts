@@ -15,16 +15,21 @@ export class GroupService {
 
   createGroup(name: string, password: string): null | Observable<any> {
     const headers = makeHeadersWithAuthField();
-    return headers == null ? null : this.http.post(`${this.baseUrl}groups/`, {name, password}, {headers: headers});
+    return headers == null ? null : this.http.post(`${this.baseUrl}groups`, {name, password}, {headers: headers});
   }
 
   getUserGroupData(): null | Observable<any> {
     const headers = makeHeadersWithAuthField();
-    return headers == null ? null : this.http.get(`${this.baseUrl}groups/`, {headers: headers});
+    return headers == null ? null : this.http.get(`${this.baseUrl}groups`, {headers: headers});
   }
 
   deleteGroup(groupId: string): null | Observable<any> {
     const headers = makeHeadersWithAuthField();
     return headers == null ? null : this.http.delete(`${this.baseUrl}groups/${groupId}`, {headers: headers});
+  }
+
+  joinGroup(name: string, password: string): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.post(`${this.baseUrl}groups/join`, {name, password}, {headers: headers});
   }
 }
