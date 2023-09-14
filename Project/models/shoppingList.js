@@ -107,13 +107,13 @@ const getList = async (user, listId) => {
 }
 
 const getLists = async (user) => {
-    const groups = user.groups;
-    const lists = await ShoppingList.find({group: {$in: groups}});
+    const lists = await ShoppingList.find({group: {$in: user.groups}});
     let toReturn = [];
     for (let i = 0; i < lists.length; ++i) {
+        const group = await Group.findOne({_id: lists[i].group});
         toReturn.push({
             id: lists[i]._id,
-            groupName: await Group.findOne({_id: lists[i].group._id}).name,
+            groupName: group.name,
             group: lists[i].group,
             name: lists[i].name,
             date: lists[i].date,
