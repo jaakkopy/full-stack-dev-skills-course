@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ValidationError = require('../errors/validationError');
+const Group = require('./group');
 
 const ShoppingListItemSchema = mongoose.Schema({
     name: {
@@ -77,20 +78,15 @@ const createList = async (newList, creator) => {
 }
 
 const getGroupsLists = async (user, groupIdString) => {
-    let groupId = null;
-    for (let i = 0; i < user.groups.length; ++i) {
-        if (user.groups[i].toString() === groupIdString) {
-            groupId = user.groups[i];
-            break;
-        }
-    }
-    if (groupId == null) {
+    const group = await Group.findOne({_id: new mongoose.Types.ObjectId(groupIdString)});
+    if (group == null)
+        throw new ValidationError("No group with that id exists");
+    if (!user.groups.find(g => g._id.equals(group._id)))
         throw new ValidationError("Not a member of that group");
-    }
-    const lists = await ShoppingList.find({ group: { $in:  groupId} });
-    let toReturn = [];
+    const lists = await ShoppingList.find({ group: { $in:  group._id} });
+    let toReturn = {name: group.name, lists: []};
     lists.forEach(l => {
-        toReturn.push({
+        toReturn.lists.push({
             // return only the basic information about the list. Items will be fetched from a different route
             id: l._id,
             name: l.name,

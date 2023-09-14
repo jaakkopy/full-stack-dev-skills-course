@@ -14,6 +14,7 @@ export class ListsComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   router: Router = inject(Router);
   groupId: string | null = null;
+  groupName: string | null = null;
   selectedItemId: string | null = null;
   
   newListForm = new FormGroup({
@@ -35,8 +36,9 @@ export class ListsComponent {
     }
     observable.subscribe(response => {
       if (response?.success) {
-        this.lists = response.content;
-        console.log(this.lists);
+        console.log(response.content);
+        this.lists = response.content.lists;
+        this.groupName = response.content.name;
       } else {
         // TODO: notify of error
       }
