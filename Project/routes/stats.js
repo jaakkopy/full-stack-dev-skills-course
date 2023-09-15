@@ -1,7 +1,7 @@
 const Router = require('express').Router;
 const helpers = require('./helpers.js');
 const passport = require('passport');
-const ShoppingList = require('../models/shoppingList.js');
+const ShoppingList = require('../models/listOperations.js');
 
 const router = Router();
 
