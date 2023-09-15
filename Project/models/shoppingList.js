@@ -184,6 +184,60 @@ const updateListItem = async (user, listid, itemid, newValues) => {
     await list.save();
 }
 
+const getStatsForGroup = async (user, groupId) => {
+    const group = await Group.findOne({_id: new mongoose.Types.ObjectId(groupId)});
+    if (group == null)
+        throw new ValidationError("No group with that id exists");
+    if (!user.groups.find(g => g._id.equals(group._id)))
+        throw new ValidationError("Not a member of that group");
+    const lists = await ShoppingList.find({ group: { $in:  group._id} });
+
+    let amountPurchasesByProductName = {};
+    let amountPurchasesByCategory = {};
+    let totalRegisteredSpendingPerCategory = {};
+    let amountListsPerDay = {};
+    let totalCosts = [];
+
+    const day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    lists.forEach(list => {
+        const dayOfWeek = day[new Date(list.date).getDay()];
+        amountListsPerDay[dayOfWeek] = (amountListsPerDay[dayOfWeek] ?? 0) + 1;
+        let totalCost = 0;
+        list.items.forEach(item => {
+            const category = item.category || "Undefined";
+            const price = item.price || 0;
+            const name = item.name;
+            const quantity = item.quantity;
+
+            amountPurchasesByProductName[name] = (amountPurchasesByProductName[name] ?? 0) + quantity;
+            amountPurchasesByCategory[category] = (amountPurchasesByCategory[category] ?? 0) + quantity;
+            totalRegisteredSpendingPerCategory[category] = (totalRegisteredSpendingPerCategory[category] ?? 0) + quantity * price;
+            totalCost += price * quantity;
+        });
+        totalCosts.push(totalCost);
+    });
+
+    const findKeyWithMaxValue = (obj) => {
+        let most = 0;
+        let toReturn;
+        for (const [key, val] of Object.entries(obj)) {
+            if (val > most) {
+                most = val;
+                toReturn = [key, val];
+            }
+        }
+        return toReturn;
+    }
+
+    let mostPurchasedProduct = findKeyWithMaxValue(amountPurchasesByCategory);
+    let dayWithMostLists = findKeyWithMaxValue(amountListsPerDay);
+    let averageCostOfList = 0;
+    if (totalCosts.length > 0)
+        averageCostOfList = totalCosts.reduce((acc, cur) => acc + cur) / totalCosts.length;
+
+    return {mostPurchasedProduct, averageCostOfList, dayWithMostLists, amountPurchasesByProductName, amountPurchasesByCategory, totalRegisteredSpendingPerCategory, amountListsPerDay};
+}
+
 module.exports.createList = createList;
 module.exports.deleteList = deleteList;
 module.exports.getGroupsLists = getGroupsLists;
@@ -192,3 +246,4 @@ module.exports.addToList = addToList;
 module.exports.deleteItemFromList = deleteItemFromList;
 module.exports.updateListItem = updateListItem;
 module.exports.getLists = getLists;
+module.exports.getStatsForGroup = getStatsForGroup;

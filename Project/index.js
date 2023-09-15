@@ -24,6 +24,7 @@ app.use(express.json());
 app.use('/users', require('./routes/users'));
 app.use('/groups', require('./routes/groups'));
 app.use('/lists', require('./routes/shoppingList'));
+app.use('/stats', require('./routes/stats'));
 
 app.get('/', (req, res) => {
     res.send("Hello");
