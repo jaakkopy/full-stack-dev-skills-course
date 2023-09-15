@@ -199,9 +199,10 @@ const getStatsForGroup = async (user, groupId) => {
     let totalCosts = [];
 
     const day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    day.forEach(d => amountListsPerDay[d] = 0);
     lists.forEach(list => {
-        const dayOfWeek = day[new Date(list.date).getDay()];
-        amountListsPerDay[dayOfWeek] = (amountListsPerDay[dayOfWeek] ?? 0) + 1;
+        const dayOfWeek = day[new Date(list.date).getDay() - 1];
+        amountListsPerDay[dayOfWeek] += 1;
         let totalCost = 0;
         list.items.forEach(item => {
             const category = item.category || "Undefined";
@@ -229,7 +230,7 @@ const getStatsForGroup = async (user, groupId) => {
         return toReturn;
     }
 
-    let mostPurchasedProduct = findKeyWithMaxValue(amountPurchasesByCategory);
+    let mostPurchasedProduct = findKeyWithMaxValue(amountPurchasesByProductName);
     let dayWithMostLists = findKeyWithMaxValue(amountListsPerDay);
     let averageCostOfList = 0;
     if (totalCosts.length > 0)
