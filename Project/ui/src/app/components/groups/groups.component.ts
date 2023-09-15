@@ -28,6 +28,7 @@ export class GroupsComponent {
     observable.subscribe(response => {
       if (response.success) {
         this.groups = response.content;
+        console.log(this.groups);
       }
     });
   }
@@ -60,6 +61,12 @@ export class GroupsComponent {
   showSelectedGroupsLists() {
     if (this.selectedItemId) {
       this.router.navigate(['/lists', this.selectedItemId]);
+    }
+  }
+
+  showSelectedGroupsStats() {
+    if (this.selectedItemId) {
+      this.router.navigate(['/stats', this.selectedItemId]);
     }
   }
 

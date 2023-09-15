@@ -53,4 +53,9 @@ export class ListService {
     const headers = makeHeadersWithAuthField();
     return headers == null ? null : this.http.put(`${this.baseUrl}lists/${listId}/${itemId}`, newValues, { headers: headers });
   }
+
+  getListStatsForGroup(groupId: string): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}stats/${groupId}`, { headers: headers });
+  }
 }
