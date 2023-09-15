@@ -38,6 +38,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
+    this.loadToken();
     const service = new JwtHelperService();
     return !service.isTokenExpired(this.authToken);
   }
