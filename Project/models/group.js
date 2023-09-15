@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const User = require('./user');
-const {hashPassword, comparePassword} = require('./authHelpers');
+const { hashPassword, comparePassword } = require('./authHelpers');
 const ValidationError = require('../errors/validationError');
+const ShoppingList = require('./shoppingList'); 
 
 const Groupchema = mongoose.Schema({
     name: {
@@ -29,7 +30,7 @@ const validateNewGroupData = (newGroupData) => {
 const createGroup = async (user, newGroupData) => {
     validateNewGroupData(newGroupData);
     newGroupData.password = await hashPassword(newGroupData.password);
-    const toAdd = Group({creatorId: user._id, ...newGroupData});
+    const toAdd = Group({ creatorId: user._id, ...newGroupData });
     await toAdd.save();
     // add the creator as a member of the group
     user.groups.push(toAdd._id);
@@ -41,30 +42,38 @@ const getUserGroupInfo = async (user) => {
     const groups = await Group.find({ _id: { $in: user.groups } });
     let toReturn = []
     groups.forEach(g => {
-        toReturn.push({id: g._id, name: g.name});
+        toReturn.push({ id: g._id, name: g.name });
     });
     return toReturn;
 }
 
 const deleteGroup = async (user, groupId) => {
-    const group = await Group.findOne({_id: new mongoose.Types.ObjectId(groupId)});
+    const group = await Group.findOne({ _id: new mongoose.Types.ObjectId(groupId) });
     if (!user.groups.find(g => g._id.equals(group._id)))
         throw new ValidationError("Not a member of that group");
     if (!group.creatorId.equals(user._id))
         throw new ValidationError("Only the creator of the group can delete it");
-    // remove users from the group
-    const members = await User.find({groups: group._id});
-    for (let i = 0; i < members.length; ++i) {
-        members[i].groups = members[i].groups.filter(g => !g._id.equals(group._id));
-        await members[i].save();
-    }
-    await Group.deleteOne({_id: group._id});
+    // The following should be atomic, so a transaction is used
+    const session = await mongoose.startSession();
+    await mongoose.connection.transaction(async function executor(session) {
+        // remove users from the group
+        const members = await User.find({ groups: group._id });
+        for (let i = 0; i < members.length; ++i) {
+            members[i].groups = members[i].groups.filter(g => !g._id.equals(group._id));
+            await members[i].save();
+        }
+        // remove the shopping lists of the group
+        await ShoppingList.deleteMany({group: group._id});
+        // delete the group itself
+        await Group.deleteOne({ _id: group._id });
+    });
+    session.endSession();
 }
 
 const joinGroup = async (user, joinData) => {
     const name = joinData.name;
     const givenPassword = joinData.name;
-    const group = await Group.findOne({name: name});
+    const group = await Group.findOne({ name: name });
     if (!group)
         throw new ValidationError("No group with that name exists");
     if (user.groups.find(g => g._id === group._id))

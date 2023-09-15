@@ -21,7 +21,6 @@ export class AllListsComponent {
     observable.subscribe(response => {
       if (response?.success) {
         this.lists = response.content;
-        console.log(this.lists)
       } else {
         // TODO: notify of error
       }

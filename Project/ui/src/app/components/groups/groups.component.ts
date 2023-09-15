@@ -28,7 +28,6 @@ export class GroupsComponent {
     observable.subscribe(response => {
       if (response.success) {
         this.groups = response.content;
-        console.log(this.groups);
       }
     });
   }

@@ -38,7 +38,6 @@ export class ListComponent {
     observable.subscribe(response => {
       if (response?.success) {
         this.list = response.content;
-        console.log(this.list);
       } else {
         // TODO: notify of error
       }

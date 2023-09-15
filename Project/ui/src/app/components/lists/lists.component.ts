@@ -36,7 +36,6 @@ export class ListsComponent {
     }
     observable.subscribe(response => {
       if (response?.success) {
-        console.log(response.content);
         this.lists = response.content.lists;
         this.groupName = response.content.name;
       } else {
