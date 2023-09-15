@@ -27,6 +27,15 @@ router.delete('/:id', passport.authenticate('jwt', {session: false}), async (req
     }
 });
 
+router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const group = await GroupOperations.getGroupById(req.user, req.params.id);
+        res.status(200).json(helpers.successResponse(group));
+    } catch (err) {
+        helpers.handleError(err, res);
+    }
+});
+
 router.get('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         const groups = await GroupOperations.getUserGroupInfo(req.user);

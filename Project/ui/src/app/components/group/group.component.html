@@ -1,0 +1,10 @@
+<h1>{{groupData?.name}}</h1>
+<div class="row">
+    <small>Created by {{groupData?.creatorName}}</small>
+</div>
+<br>
+<div class="btn-group">
+    <button class="border-black btn btn-primary" (click)="showGroupsStats()">Stats</button>
+    <button class="border-black btn btn-primary" (click)="showGroupsLists()">Lists</button>
+    <button class="border-black btn btn-danger" (click)="deleteGroup()">Delete</button>
+</div>

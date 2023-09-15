@@ -17,6 +17,7 @@ import { ListsComponent } from './components/lists/lists.component';
 import { ListComponent } from './components/list/list.component';
 import { AllListsComponent } from './components/all-lists/all-lists.component';
 import { GroupStatsComponent } from './components/group-stats/group-stats.component';
+import { GroupComponent } from './components/group/group.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { GroupStatsComponent } from './components/group-stats/group-stats.compon
     ListsComponent,
     ListComponent,
     AllListsComponent,
-    GroupStatsComponent
+    GroupStatsComponent,
+    GroupComponent
   ],
   imports: [
     BrowserModule,

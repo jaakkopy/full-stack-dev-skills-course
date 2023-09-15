@@ -62,19 +62,6 @@ export class ListsComponent {
     }
   }
 
-  deleteSelectedList() {
-    if (this.selectedItemId != null) {
-      this.listService.deleteList(this.selectedItemId)?.subscribe(res => {
-        if (res.success) {
-          this.lists = this.lists.filter(l => l.id !== this.selectedItemId);
-          // TODO: notify of success
-        } else {
-          // TODO: notify of failure 
-        }
-      });
-    }
-  }
-
   onNewListSubmission() {
     if (this.groupId && this.newListForm.value.name && this.newListForm.value.date) {
       const name = this.newListForm.value.name;

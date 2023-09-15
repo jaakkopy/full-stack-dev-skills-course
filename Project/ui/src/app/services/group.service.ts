@@ -32,4 +32,9 @@ export class GroupService {
     const headers = makeHeadersWithAuthField();
     return headers == null ? null : this.http.post(`${this.baseUrl}groups/join`, {name, password}, {headers: headers});
   }
+
+  getGroupById(groupId: string): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}groups/${groupId}`, {headers: headers});
+  }
 }

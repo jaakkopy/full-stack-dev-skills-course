@@ -74,4 +74,18 @@ const joinGroup = async (user, joinData) => {
     return group._id;
 }
 
-module.exports = {createGroup, getUserGroupInfo, deleteGroup, joinGroup};
+const getGroupById = async (user, groupId) => {
+    const group = await Group.findOne({ _id: new mongoose.Types.ObjectId(groupId) });
+    if (!group)
+        throw new ValidationError("Group does not exist");
+    if (!user.groups.find(g => g._id.equals(group._id)))
+        throw new ValidationError("Not a member of that group");
+    const creator = await User.findOne({ _id: group.creatorId });
+    return {
+        id: group._id,
+        name: group.name,
+        creatorName: creator.username
+    }
+}
+
+module.exports = {createGroup, getUserGroupInfo, deleteGroup, joinGroup, getGroupById};

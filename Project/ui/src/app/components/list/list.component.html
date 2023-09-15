@@ -4,38 +4,13 @@
         <p>{{list.date}}</p>
         <p>Created by {{list.creatorName}}</p>
     </div>
-    <div class="dropdown">
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1"
-            aria-expanded="false" aria-controls="collapse1">
-            Add an item
-        </button>
-        <div class="collapse" id="collapse1">
-            <form id="new-item-form" (submit)="onNewItemSubmit()" [formGroup]="itemForm">
-                <div class="form-group">
-                    <label>Item name</label>
-                    <input type="text" class="form-control" formControlName="name">
-                </div>
-                <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="number" class="form-control" formControlName="quantity">
-                </div>
-                <div class="form-group">
-                    <label>Price (optional)</label>
-                    <input type="number" class="form-control" formControlName="price">
-                </div>
-                <div class="form-group">
-                    <label>Category (optional)</label>
-                    <input type="text" class="form-control" formControlName="category">
-                </div>
-                <div class="form-group">
-                    <label>Comment (optional)</label>
-                    <input type="text" class="form-control" formControlName="comment">
-                </div>
-                <input data-bs-toggle="collapse" data-bs-target="#collapse1" type="submit" class="btn btn-primary"
-                    value="Add">
-            </form>
-        </div>
+
+
+    <div class="btn-group">
+        <button class="btn btn-danger border-black" (click)="deleteList()">Delete List</button>
     </div>
+
+    <br>
 
     <h2>Items</h2>
     <ul class="list-group" *ngFor="let item of list.items">
@@ -53,11 +28,17 @@
         </li>
     </ul>
 
+    <br>
+
     <div class="btn-group">
-        <button (click)="deleteSelectedItem()">Delete</button>
-        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false"
+        <button class="btn btn-danger border-black" (click)="deleteSelectedItem()">Delete Item</button>
+        <button class="btn btn-secondary border-black" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false"
             aria-controls="collapse2">
             Edit
+        </button>
+        <button class="btn btn-primary border-black" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1"
+            aria-expanded="false" aria-controls="collapse1">
+            Add an item
         </button>
     </div>
 
@@ -84,8 +65,37 @@
                     <label>Comment (optional)</label>
                     <input type="text" class="form-control" formControlName="comment">
                 </div>
-                <input data-bs-toggle="collapse" data-bs-target="#collapse2" type="submit" class="btn btn-primary"
+                <input data-bs-toggle="collapse" data-bs-target="#collapse2" type="submit" class="btn btn-primary border-black"
                     value="Apply edit">
+            </form>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <div class="collapse" id="collapse1">
+            <form id="new-item-form" (submit)="onNewItemSubmit()" [formGroup]="itemForm">
+                <div class="form-group">
+                    <label>Item name</label>
+                    <input type="text" class="form-control" formControlName="name">
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="form-control" formControlName="quantity">
+                </div>
+                <div class="form-group">
+                    <label>Price (optional)</label>
+                    <input type="number" class="form-control" formControlName="price">
+                </div>
+                <div class="form-group">
+                    <label>Category (optional)</label>
+                    <input type="text" class="form-control" formControlName="category">
+                </div>
+                <div class="form-group">
+                    <label>Comment (optional)</label>
+                    <input type="text" class="form-control" formControlName="comment">
+                </div>
+                <input data-bs-toggle="collapse" data-bs-target="#collapse1" type="submit" class="btn btn-primary border-black"
+                    value="Add">
             </form>
         </div>
     </div>

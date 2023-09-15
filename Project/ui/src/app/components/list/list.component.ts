@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NewShoppingListItem } from 'src/app/interfaces/new-shopping-list-item';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
@@ -13,6 +13,7 @@ export class ListComponent {
   list: ShoppingList | null = null;
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
+  router: Router= inject(Router);
   listId: string | null = null;
   selectedItemId: string | null = null;
   itemForm = new FormGroup({
@@ -42,6 +43,19 @@ export class ListComponent {
         // TODO: notify of error
       }
     });
+  }
+
+  deleteList() {
+    if (this.listId) {
+      this.listService.deleteList(this.listId)?.subscribe(res => {
+        if (res.success) {
+          // TODO: notify of success
+          this.router.navigate(['/lists']);
+        } else {
+          // TODO: notify of error
+        }
+      })
+    }
   }
 
   onNewItemSubmit() {

@@ -32,6 +32,12 @@ export class GroupsComponent {
     });
   }
 
+  showSelectedGroup() {
+    if (this.selectedItemId) {
+      this.router.navigate(['/group', this.selectedItemId]);
+    }
+  }
+
   setSelectedListItem(itemId: string) {
     const element = document.getElementById(itemId);
     if (this.selectedItemId != null) {
@@ -42,31 +48,6 @@ export class GroupsComponent {
     element?.setAttribute('aria-current', 'true');
     element?.classList.add('active');
     this.selectedItemId = itemId;
-  }
-
-  deleteSelectedGroup() {
-    if (this.selectedItemId != null) {
-      this.groupService.deleteGroup(this.selectedItemId)?.subscribe(res => {
-        if (res?.success) {
-          this.groups = this.groups.filter(g => g.id !== this.selectedItemId);
-          // TODO: notify of success
-        } else {
-          // TODO: notify of failure 
-        }
-      });
-    }
-  }
-
-  showSelectedGroupsLists() {
-    if (this.selectedItemId) {
-      this.router.navigate(['/lists', this.selectedItemId]);
-    }
-  }
-
-  showSelectedGroupsStats() {
-    if (this.selectedItemId) {
-      this.router.navigate(['/stats', this.selectedItemId]);
-    }
   }
 
   onNewGroupSubmission() {

@@ -2,33 +2,30 @@
 <p *ngIf="this.groups">Click an item to show more options</p>
 <p *ngIf="!this.groups">Not a member of any group</p>
 
-<div class="container-fluid">
-    <div class="row">
-    <ul class="list-group" *ngFor="let item of this.groups">
+<ul class="list-group" *ngFor="let item of this.groups">
     <li id={{item.id}} (click)="setSelectedListItem(item.id)"
         class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
             {{item.name}}
         </div>
     </li>
-    </ul>    
+</ul>
+<br>
+<div class="row">
+    <div class="btn-group">
+        <button (click)="showSelectedGroup()" class="border-black btn btn-primary">Select</button>
+    </div>
 </div>
-
-    <div class="row">
-
-    <button class="col-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-new-group" aria-expanded="false"
-        aria-controls="collapse-new-group">
-        Create
-    </button>
-    <button class="col-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-join-group" aria-expanded="false"
-        aria-controls="collapse-join-group">
-        Join a group
-    </button>
-    <div class="col-2"></div>
-    <button class="col-2" *ngIf="selectedItemId" type="button" (click)="deleteSelectedGroup()">Delete</button>
-    <button class="col-2" *ngIf="selectedItemId" type="button" (click)="showSelectedGroupsStats()">Show stats</button>
-    <button class="col-2" *ngIf="selectedItemId" type="button" (click)="showSelectedGroupsLists()">Show lists</button>
-
+<div class="row">
+    <div class="btn-group">
+        <button class="border-black btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-new-group"
+            aria-expanded="false" aria-controls="collapse-new-group">
+            Create
+        </button>
+        <button class="border-black btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-join-group"
+            aria-expanded="false" aria-controls="collapse-join-group">
+            Join
+        </button>
     </div>
 </div>
 
