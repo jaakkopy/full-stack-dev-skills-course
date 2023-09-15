@@ -30,11 +30,15 @@ const validateNewGroupData = (newGroupData) => {
 const createGroup = async (user, newGroupData) => {
     validateNewGroupData(newGroupData);
     newGroupData.password = await hashPassword(newGroupData.password);
+    const session = await mongoose.startSession();
     const toAdd = Group({ creatorId: user._id, ...newGroupData });
-    await toAdd.save();
-    // add the creator as a member of the group
-    user.groups.push(toAdd._id);
-    await user.save();
+    await mongoose.connection.transaction(async function executor(session) {
+        await toAdd.save();
+        // add the creator as a member of the group
+        user.groups.push(toAdd._id);
+        await user.save();
+    });
+    session.endSession();
     return toAdd._id;
 }
 
