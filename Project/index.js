@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dbConfig = require('./config/database');
 const passport = require('passport');
 require('./config/passport')(passport);
+const path = require('path');
 const morgan = require('morgan');
 
 mongoose.connect(dbConfig.database);
@@ -26,8 +27,11 @@ app.use('/groups', require('./routes/groups'));
 app.use('/lists', require('./routes/shoppingList'));
 app.use('/stats', require('./routes/stats'));
 
-app.get('/', (req, res) => {
-    res.send("Hello");
+// static folder for the Angular build
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
