@@ -28,15 +28,14 @@
 
 <br>
 
-<ul class="list-group" *ngFor="let item of lists">
-    <li id={{item.id}} [routerLink]="['/list', item.id]"
-        class="list-group-item d-flex justify-content-between align-items-start">
+<div class="list-group" *ngFor="let item of lists">
+    <a id={{item.id}} [routerLink]="['/list', item.id]"
+        class="list-group-item list-group-item-action">
         <div class="ms-2 me-auto">
             {{item.name}}: {{item.date}}
         </div>
         <div class="ms-2 me-auto">
             Created by {{item.creatorName}}
         </div>
-    </li>
-</ul>
-<br>
+    </a>
+</div>

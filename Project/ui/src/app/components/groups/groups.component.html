@@ -2,14 +2,13 @@
 <p *ngIf="this.groups">Click an item to show more options</p>
 <p *ngIf="!this.groups">Not a member of any group</p>
 
-<ul class="list-group" *ngFor="let item of this.groups">
-    <li id={{item.id}} [routerLink]="['/group', item.id]"
-        class="list-group-item d-flex justify-content-between align-items-start">
+<div class="list-group" *ngFor="let item of this.groups">
+    <a [routerLink]="['/group', item.id]" class="list-group-item list-group-item-action">
         <div class="ms-2 me-auto">
             {{item.name}}
         </div>
-    </li>
-</ul>
+    </a>
+</div>
 <br>
 
 <div class="row">
