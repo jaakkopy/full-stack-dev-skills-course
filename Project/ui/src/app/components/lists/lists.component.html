@@ -1,22 +1,12 @@
 <h2>Shopping lists of group {{groupName}}</h2>
-<ul class="list-group" *ngFor="let item of lists">
-    <li id={{item.id}} (click)="setSelectedListItem(item.id)"
-        class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="ms-2 me-auto">
-            {{item.name}}: {{item.date}}
-        </div>
-        <div class="ms-2 me-auto">
-            Created by {{item.creatorName}}
-        </div>
-    </li>
-</ul>
+
 <br>
+
 <div class="btn-group">
     <button class="btn btn-secondary border-black" type="button" data-bs-toggle="collapse"
         data-bs-target="#collapse-new-list" aria-expanded="false" aria-controls="collapse-new-list">
-        Create
+        Create New List
     </button>
-    <button class="btn btn-primary border-black" type="button" (click)="showSelectedList()">Select</button>
 </div>
 
 <div class="dropdown">
@@ -35,3 +25,18 @@
         </form>
     </div>
 </div>
+
+<br>
+
+<ul class="list-group" *ngFor="let item of lists">
+    <li id={{item.id}} [routerLink]="['/list', item.id]"
+        class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+            {{item.name}}: {{item.date}}
+        </div>
+        <div class="ms-2 me-auto">
+            Created by {{item.creatorName}}
+        </div>
+    </li>
+</ul>
+<br>

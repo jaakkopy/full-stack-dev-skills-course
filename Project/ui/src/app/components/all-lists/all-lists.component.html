@@ -1,6 +1,6 @@
 <h2>All lists</h2>
 <ul class="list-group" *ngFor="let item of lists">
-  <li id={{item.id}} (click)="setSelectedListItem(item.id)"
+  <li id={{item.id}} [routerLink]="['/list', item.id]"
     class="list-group-item d-flex justify-content-between align-items-start">
     <div class="ms-2 me-auto">
       <div class="fw-bold">{{item.name}}</div>
@@ -12,7 +12,3 @@
     </div>
   </li>
 </ul>
-<br>
-<div class="btn-group">
-  <button type="button" class="btn btn-primary border-black" (click)="showSelectedList()">Select</button>
-</div>

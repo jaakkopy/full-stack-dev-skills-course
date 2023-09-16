@@ -48,16 +48,4 @@ export class GroupComponent {
     }
   }
 
-  showGroupsLists() {
-    if (this.groupId) {
-      this.router.navigate(['/lists', this.groupId]);
-    }
-  }
-
-  showGroupsStats() {
-    if (this.groupId) {
-      this.router.navigate(['/stats', this.groupId]);
-    }
-  }
-
 }

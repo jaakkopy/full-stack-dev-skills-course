@@ -3,8 +3,8 @@
     <small>Created by {{groupData?.creatorName}}</small>
 </div>
 <br>
+<p><a class="link-primary link-opacity-10-hover" [routerLink]="['/lists', this.groupId]">Group Lists</a></p>
+<p><a class="link-primary link-opacity-10-hover" [routerLink]="['/stats', this.groupId]">Group Stats</a></p>
 <div class="btn-group">
-    <button class="border-black btn btn-primary" (click)="showGroupsStats()">Stats</button>
-    <button class="border-black btn btn-primary" (click)="showGroupsLists()">Lists</button>
-    <button class="border-black btn btn-danger" (click)="deleteGroup()">Delete</button>
+    <button class="border-black btn btn-danger" (click)="deleteGroup()">Delete Group</button>
 </div>

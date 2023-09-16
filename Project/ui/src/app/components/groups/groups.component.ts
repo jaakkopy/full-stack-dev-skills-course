@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
 
@@ -11,8 +10,6 @@ import { GroupService } from 'src/app/services/group.service';
 export class GroupsComponent {
   groupService: GroupService = inject(GroupService);
   groups: Group[] = [];
-  selectedItemId: string | null = null;
-  router: Router = inject(Router);
   newGroupForm = new FormGroup({
     name: new FormControl(''),
     password: new FormControl('')
@@ -30,24 +27,6 @@ export class GroupsComponent {
         this.groups = response.content;
       }
     });
-  }
-
-  showSelectedGroup() {
-    if (this.selectedItemId) {
-      this.router.navigate(['/group', this.selectedItemId]);
-    }
-  }
-
-  setSelectedListItem(itemId: string) {
-    const element = document.getElementById(itemId);
-    if (this.selectedItemId != null) {
-      const previousSelected = document.getElementById(this.selectedItemId);
-      previousSelected?.setAttribute('aria-current', 'false');
-      previousSelected?.classList.remove('active')
-    }
-    element?.setAttribute('aria-current', 'true');
-    element?.classList.add('active');
-    this.selectedItemId = itemId;
   }
 
   onNewGroupSubmission() {

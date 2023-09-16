@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
 
@@ -12,10 +12,8 @@ export class ListsComponent {
   lists: ShoppingList[] = [];
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
-  router: Router = inject(Router);
   groupId: string | null = null;
   groupName: string | null = null;
-  selectedItemId: string | null = null;
   
   newListForm = new FormGroup({
     name: new FormControl(''),
@@ -42,24 +40,6 @@ export class ListsComponent {
         // TODO: notify of error
       }
     });
-  }
-
-  setSelectedListItem(itemId: string) {
-    const element = document.getElementById(itemId);
-    if (this.selectedItemId != null) {
-      const previousSelected = document.getElementById(this.selectedItemId);
-      previousSelected?.setAttribute('aria-current', 'false');
-      previousSelected?.classList.remove('active')
-    }
-    element?.setAttribute('aria-current', 'true');
-    element?.classList.add('active');
-    this.selectedItemId = itemId;
-  }
-
-  showSelectedList() {
-    if (this.selectedItemId != null) {
-      this.router.navigate(['/list', this.selectedItemId]);
-    }
   }
 
   onNewListSubmission() {
