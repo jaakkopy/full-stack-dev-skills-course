@@ -4,6 +4,7 @@ WORKDIR /build
 COPY . .
 
 WORKDIR ./ui
+RUN npm install
 RUN npm install -g @angular/cli
 RUN ng build
 
