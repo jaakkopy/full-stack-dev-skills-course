@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthRouteGuard } from './guards/auth.guard';
@@ -12,7 +11,7 @@ import { GroupStatsComponent } from './components/group-stats/group-stats.compon
 import { GroupComponent } from './components/group/group.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent, canActivate: [AuthRouteGuard]},
+  {path: '', component: GroupsComponent, canActivate: [AuthRouteGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [AuthRouteGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},

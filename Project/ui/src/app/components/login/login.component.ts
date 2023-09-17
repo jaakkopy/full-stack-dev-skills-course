@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Loggedinuser } from 'src/app/interfaces/loggedinuser';
 import { Loginparams } from 'src/app/interfaces/loginparams';
 import { AuthService } from 'src/app/services/auth.service';
+import { showFailureMessage, showSuccessMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-login',
@@ -29,16 +30,12 @@ export class LoginComponent {
         const user: Loggedinuser = data.user;
         const jwt = data.token;
         this.authService.storeUserData(jwt, user);
-        // TODO: notify of successful login
-        this.router.navigate(['/'])
+        showSuccessMessage("Login successful").then(() => this.router.navigate(['/']));
       } else {
-        if (data?.msg) {
-          // TODO: notify of failed login and show the provided message
-        } else {
-          // TODO: notify of failed login and show a generic failure message 
-        }
-        this.router.navigate(['/login']);
+        showFailureMessage(data.content).then(() => this.router.navigate(['/login']));
       } 
+    }, (err) => {
+      showFailureMessage(err.error.content).then(() => this.router.navigate(['/login']));
     });
   }
 }

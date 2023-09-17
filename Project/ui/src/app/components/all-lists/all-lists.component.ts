@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ListService } from 'src/app/services/list.service';
+import { showFailureMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-all-lists',
@@ -12,15 +13,17 @@ export class AllListsComponent {
   ngOnInit() {
     const observable = this.listService.getListsForUser();
     if (observable == null) {
-      // TODO: notify of error
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
       if (response?.success) {
         this.lists = response.content;
       } else {
-        // TODO: notify of error
+        showFailureMessage(response.content);
       }
+    }, (err) => {
+      showFailureMessage(err.error.content);
     });
   }
 }

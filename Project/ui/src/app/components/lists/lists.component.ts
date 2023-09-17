@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
+import { showFailureMessage, showSuccessMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-lists',
@@ -12,6 +13,7 @@ export class ListsComponent {
   lists: ShoppingList[] = [];
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
+  router: Router = inject(Router);
   groupId: string | null = null;
   groupName: string | null = null;
   
@@ -23,13 +25,15 @@ export class ListsComponent {
   ngOnInit() {
     this.groupId = this.route.snapshot.params['groupid']
     if (this.groupId == null) {
-      // TODO: notify of error
+      showFailureMessage("No group id supplied");
+      this.router.navigate(['/groups']);
       return;
     }
     // fetch lists for the given group 
     const observable = this.listService.getListsForGroup(this.groupId);
     if (observable == null) {
       // TODO: notify of error
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
@@ -37,9 +41,9 @@ export class ListsComponent {
         this.lists = response.content.lists;
         this.groupName = response.content.name;
       } else {
-        // TODO: notify of error
+        showFailureMessage(response.content);
       }
-    });
+    }, (err) => {showFailureMessage(err.error.message)});
   }
 
   onNewListSubmission() {
@@ -48,7 +52,7 @@ export class ListsComponent {
       const date = this.newListForm.value.date;
       this.listService.createList(this.groupId, name, date)?.subscribe(res => {
         if (res.success) {
-          // TODO: notify of success
+          showSuccessMessage("List created");
           const user = JSON.parse(localStorage.getItem('user')!);
           const add = {
             id: res.content,
@@ -59,9 +63,9 @@ export class ListsComponent {
           }
           this.lists.push(add);
         } else {
-          // TODO: notify of failure 
+          showFailureMessage(res.content);
         }
-      })
+      }, (err) => {showFailureMessage(err.error.content)});
     }
   }
 

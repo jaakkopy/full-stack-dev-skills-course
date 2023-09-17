@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NewShoppingListItem } from 'src/app/interfaces/new-shopping-list-item';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
+import { showSuccessMessage, showFailureMessage, showInfoMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-list',
@@ -27,13 +28,14 @@ export class ListComponent {
   ngOnInit() {
     this.listId = this.route.snapshot.params['listid']
     if (this.listId == null) {
-      // TODO: notify of error
+      showFailureMessage("No list id supplied");
+      this.router.navigate(['/groups']);
       return;
     }
     // fetch lists for the given group 
     const observable = this.listService.getListData(this.listId);
     if (observable == null) {
-      // TODO: notify of error
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
@@ -41,30 +43,32 @@ export class ListComponent {
         this.list = response.content;
       } else {
         // TODO: notify of error
+        showFailureMessage(response.content);
       }
-    });
+    }, (err) => {showFailureMessage(err.error.content);});
   }
 
   deleteList() {
     if (this.listId) {
       this.listService.deleteList(this.listId)?.subscribe(res => {
         if (res.success) {
-          // TODO: notify of success
-          this.router.navigate(['/lists']);
+          showSuccessMessage("List deleted").then(() => this.router.navigate(['/lists']));
         } else {
-          // TODO: notify of error
+          showFailureMessage(res.content);
         }
-      })
+      }, (err) => {showFailureMessage(err.error.content);});
     }
   }
 
   onNewItemSubmit() {
     if (!this.itemForm.value?.name || !this.itemForm.value?.quantity) {
       // Todo: notify of error
+      showInfoMessage("The item needs at least a name and a quantity");
       return;
     }
     if (!this.listId) {
-      // Todo: notify of error
+      showFailureMessage("No list id supplied");
+      this.router.navigate(['/groups']);
       return;
     }
     const newItem: NewShoppingListItem = {
@@ -76,17 +80,17 @@ export class ListComponent {
     };
     const observable = this.listService.postNewListItem(this.listId, newItem);
     if (observable == null) {
-      // Todo: notify of error
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
       if (response?.success) {
         this.list?.items.push({_id: response.content, ...newItem});
-        // TODO: notify of successful addition
+        showSuccessMessage("New item added");
       } else {
-        // TODO: notify of error
+        showFailureMessage(response.content);
       }
-    });
+    }, (err) => {showFailureMessage(err.error.content)});
   }
 
   // Set the id of the selected item. Add the active class to the selected item to visualize the selection for the user
@@ -104,32 +108,32 @@ export class ListComponent {
 
   deleteSelectedItem() {
     if (this.selectedItemId === null || this.list == null) {
-      // TODO: notify
+      showInfoMessage("Please choose an item to delete first");
       return;
     }
     const observable = this.listService.deleteListItem(this.list.id, this.selectedItemId);
     if (observable == null) {
-      // TODO: notify of failure
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
       if (response.success && this.list != null) {
         this.list.items = this.list.items.filter(i => i._id !== this.selectedItemId);
-        // TODO: notify of success
+        //showSuccessMessage("Item deleted").then();
       } else {
-        // TODO: notify of failure
+        showFailureMessage(response.content);
       }
-    })
+    }, (err) => {showFailureMessage(err.error.content);});
   }
 
   onItemUpdated() {
     if (this.selectedItemId === null || this.list == null) {
-      // TODO: notify
+      showInfoMessage("Please choose an item to update first");
       return;
     }
     const observable = this.listService.updateListItem(this.list.id, this.selectedItemId, this.itemForm.value);
     if (observable == null) {
-      // TODO: notify of failure
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
@@ -148,10 +152,10 @@ export class ListComponent {
           if (vals.comment)
             item.comment = vals.comment;
         }
-        // TODO: notify of success
+        showSuccessMessage("Item updated");
       } else {
-        // TODO: notify of failure
+        showFailureMessage(response.content);
       }
-    })
+    }, (err) => {showFailureMessage(err.error.content);});
   }
 }

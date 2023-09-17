@@ -8,9 +8,6 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li *ngIf="authService.isLoggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-                    <a class="nav-link" [routerLink]="['/']">Home</a>
-                </li>
-                <li *ngIf="authService.isLoggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
                     <a class="nav-link" [routerLink]="['/groups']">Groups</a>
                 </li>
                 <li *ngIf="authService.isLoggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">

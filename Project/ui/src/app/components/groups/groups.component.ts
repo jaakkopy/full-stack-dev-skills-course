@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
+import { showFailureMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-groups',
@@ -19,7 +20,7 @@ export class GroupsComponent {
     // fetch group data for the logged in user
     const observable = this.groupService.getUserGroupData();
     if (observable == null) {
-      // TODO: notify of error
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
@@ -35,25 +36,29 @@ export class GroupsComponent {
       const password = this.newGroupForm.value.password;
       this.groupService.createGroup(name, password)?.subscribe(res => {
         if (res.success) {
-          this.groups.push({name, id: res.content});
+          this.groups.push({ name, id: res.content });
         } else {
-          // TODO: notify of failure 
+          showFailureMessage(res.content);
         }
-      })
+      }, (err) => {
+        showFailureMessage(err.error.content);
+      });
     }
   }
 
   onJoinGroupSubmission() {
-  if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
+    if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
       const name = this.newGroupForm.value.name;
       const password = this.newGroupForm.value.password;
       this.groupService.joinGroup(name, password)?.subscribe(res => {
         if (res.success) {
-          this.groups.push({name, id: res.content});
+          this.groups.push({ name, id: res.content });
         } else {
-          // TODO: notify of failure 
+          showFailureMessage(res.content);
         }
-      })
+      }, (err) => {
+        showFailureMessage(err.error.content);
+      });
     }
   }
 }

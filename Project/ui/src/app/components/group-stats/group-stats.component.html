@@ -1,17 +1,18 @@
-<h1>Amount of Purchases per Cateogry</h1>
+<p *ngIf="!this.ready">No stats to show yet. Create a list for the group <a [routerLink]="['/lists', this.groupId]">here</a></p>
+<h1 *ngIf="this.ready">Amount of Purchases per Cateogry</h1>
 <div class="chart-container">
     <canvas id="purchases-by-category">{{ purchaseCategoryDoughnutChart }}</canvas>
 </div>
-<h1>Total Spending per Category</h1>
+<h1 *ngIf="this.ready">Total Spending per Category</h1>
 <div class="chart-container">
     <canvas id="spending-by-category">{{ spendingCategoryPieChart }}</canvas>
 </div>
-<h1>Shopping Lists per Weekday</h1>
+<h1 *ngIf="this.ready">Shopping Lists per Weekday</h1>
 <div class="chart-container">
     <canvas id="lists-per-day">{{ spendingCategoryPieChart }}</canvas>
 </div>
-<h1>Most Purchased Product</h1>
+<h1 *ngIf="this.ready">Most Purchased Product</h1>
 <p id="most-purchased-product"></p>
 
-<h1>Average Cost of Shopping List</h1>
+<h1 *ngIf="this.ready">Average Cost of Shopping List</h1>
 <p id="avg-cost-list"></p>

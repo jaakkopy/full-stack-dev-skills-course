@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
+import { showFailureMessage, showSuccessMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-group',
@@ -16,21 +17,20 @@ export class GroupComponent {
   ngOnInit() {
     this.groupId = this.route.snapshot.params['groupid'];
     if (this.groupId == null) {
-      // TODO: notify of error
+      showFailureMessage("No group id supplied");
       return;
     }
     // fetch lists for the given group 
     const observable = this.groupService.getGroupById(this.groupId);
     if (observable == null) {
-      // TODO: notify of error
+      showFailureMessage("Service error");
       return;
     }
     observable.subscribe(response => {
       if (response?.success) {
         this.groupData = response.content;
-        console.log(this.groupData);
       } else {
-        // TODO: notify of error
+        showFailureMessage(response.content);
       }
     });
   }
@@ -39,11 +39,12 @@ export class GroupComponent {
     if (this.groupId != null) {
       this.groupService.deleteGroup(this.groupId)?.subscribe(res => {
         if (res?.success) {
-          // TODO: notify of success
-          this.router.navigate(['/groups']);
+          showSuccessMessage("Group deleted").then(() => this.router.navigate(['/groups']));
         } else {
-          // TODO: notify of failure 
+          showFailureMessage(res.content);
         }
+      }, (err) => {
+        showFailureMessage(err.error.content);
       });
     }
   }
