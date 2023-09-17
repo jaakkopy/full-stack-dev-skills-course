@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
-import { showFailureMessage, showSuccessMessage } from 'src/app/services/notifications';
+import { showFailureMessage, showInfoMessage, showSuccessMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-lists',
@@ -16,10 +16,10 @@ export class ListsComponent {
   router: Router = inject(Router);
   groupId: string | null = null;
   groupName: string | null = null;
-  
+
   newListForm = new FormGroup({
     name: new FormControl(''),
-    date: new FormControl('')
+    date: new FormControl()
   });
 
   ngOnInit() {
@@ -32,8 +32,7 @@ export class ListsComponent {
     // fetch lists for the given group 
     const observable = this.listService.getListsForGroup(this.groupId);
     if (observable == null) {
-      // TODO: notify of error
-      showFailureMessage("Service error");
+      showFailureMessage("Service error").then(() => this.router.navigate(['/groups']));
       return;
     }
     observable.subscribe(response => {
@@ -43,30 +42,32 @@ export class ListsComponent {
       } else {
         showFailureMessage(response.content);
       }
-    }, (err) => {showFailureMessage(err.error.message)});
+    }, (err) => { showFailureMessage(err.error.message) });
   }
 
   onNewListSubmission() {
-    if (this.groupId && this.newListForm.value.name && this.newListForm.value.date) {
-      const name = this.newListForm.value.name;
-      const date = this.newListForm.value.date;
-      this.listService.createList(this.groupId, name, date)?.subscribe(res => {
-        if (res.success) {
-          showSuccessMessage("List created");
-          const user = JSON.parse(localStorage.getItem('user')!);
-          const add = {
-            id: res.content,
-            creatorName: user.username,
-            name: name,
-            date: date,
-            items: [] 
-          }
-          this.lists.push(add);
-        } else {
-          showFailureMessage(res.content);
-        }
-      }, (err) => {showFailureMessage(err.error.content)});
+    if (!this.newListForm.value.name || !this.newListForm.value.date) {
+      showInfoMessage("Please provide a name and date for the list");
+      return;
     }
+    const name = this.newListForm.value.name;
+    const date = this.newListForm.value.date;
+    this.listService.createList(this.groupId!, name, date)?.subscribe(res => {
+      if (res.success) {
+        showSuccessMessage("List created");
+        const user = JSON.parse(localStorage.getItem('user')!);
+        const add = {
+          id: res.content,
+          creatorName: user.username,
+          name: name,
+          date: date,
+          items: [] 
+        }
+        this.lists.push(add);
+      } else {
+        showFailureMessage(res.content);
+      }
+    }, (err) => {showFailureMessage(err.error.content)});
   }
 
 }
