@@ -69,6 +69,9 @@ export class GroupStatsComponent {
           backgroundColor,
           hoverOffset: 4
         }]
+      },
+      options: {
+        responsive: true
       }
     });
   }
@@ -105,8 +108,9 @@ export class GroupStatsComponent {
         scales: {
           y: {
             beginAtZero: true
-          }
-        }
+          },
+        },
+        responsive: true
       }
     });
   }
