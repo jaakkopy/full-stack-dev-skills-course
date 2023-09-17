@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
-import { showFailureMessage, showSuccessMessage } from 'src/app/services/notifications';
+import { showConfirmation, showFailureMessage, showSuccessMessage } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-group',
@@ -17,13 +17,13 @@ export class GroupComponent {
   ngOnInit() {
     this.groupId = this.route.snapshot.params['groupid'];
     if (this.groupId == null) {
-      showFailureMessage("No group id supplied");
+      showFailureMessage("No group id supplied").then(() => this.router.navigate(['/groups']));
       return;
     }
     // fetch lists for the given group 
     const observable = this.groupService.getGroupById(this.groupId);
     if (observable == null) {
-      showFailureMessage("Service error");
+      showFailureMessage("Service error").then(() => this.router.navigate(['/groups']));
       return;
     }
     observable.subscribe(response => {
@@ -36,8 +36,13 @@ export class GroupComponent {
   }
 
   deleteGroup() {
-    if (this.groupId != null) {
-      this.groupService.deleteGroup(this.groupId)?.subscribe(res => {
+    if (!this.groupId) {
+      showFailureMessage("No group id supplied").then(() => this.router.navigate(['/groups']));
+      return;
+    }
+
+    const onAgree = () => {
+      this.groupService.deleteGroup(this.groupId!)?.subscribe(res => {
         if (res?.success) {
           showSuccessMessage("Group deleted").then(() => this.router.navigate(['/groups']));
         } else {
@@ -47,6 +52,11 @@ export class GroupComponent {
         showFailureMessage(err.error.content);
       });
     }
-  }
 
+    showConfirmation(`Do you really want to delete group ${this.groupData.name}?`).then((result) => {
+      if (result.isConfirmed) {
+        onAgree();
+      } 
+    });
+  }
 }

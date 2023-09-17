@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NewShoppingListItem } from 'src/app/interfaces/new-shopping-list-item';
 import { ShoppingList } from 'src/app/interfaces/shopping-list';
 import { ListService } from 'src/app/services/list.service';
-import { showSuccessMessage, showFailureMessage, showInfoMessage } from 'src/app/services/notifications';
+import { showSuccessMessage, showFailureMessage, showInfoMessage, showConfirmation } from 'src/app/services/notifications';
 
 @Component({
   selector: 'app-list',
@@ -14,7 +14,7 @@ export class ListComponent {
   list: ShoppingList | null = null;
   listService: ListService = inject(ListService);
   route: ActivatedRoute = inject(ActivatedRoute);
-  router: Router= inject(Router);
+  router: Router = inject(Router);
   listId: string | null = null;
   selectedItemId: string | null = null;
   itemForm = new FormGroup({
@@ -45,30 +45,40 @@ export class ListComponent {
         // TODO: notify of error
         showFailureMessage(response.content);
       }
-    }, (err) => {showFailureMessage(err.error.content);});
+    }, (err) => { showFailureMessage(err.error.content); });
   }
 
   deleteList() {
-    if (this.listId) {
-      this.listService.deleteList(this.listId)?.subscribe(res => {
+    if (!this.listId || !this.list) {
+      showFailureMessage("No list id supplied");
+      this.router.navigate(['/groups']);
+      return;
+    }
+
+    const onAgree = () => {
+      this.listService.deleteList(this.listId!)?.subscribe(res => {
         if (res.success) {
           showSuccessMessage("List deleted").then(() => this.router.navigate(['/lists']));
         } else {
           showFailureMessage(res.content);
         }
-      }, (err) => {showFailureMessage(err.error.content);});
+      }, (err) => { showFailureMessage(err.error.content); });
     }
+
+    showConfirmation(`Do you really want to delete list ${this.list.name}?`).then((result) => {
+      if (result.isConfirmed) {
+        onAgree();
+      }
+    });
   }
 
   onNewItemSubmit() {
     if (!this.itemForm.value?.name || !this.itemForm.value?.quantity) {
-      // Todo: notify of error
       showInfoMessage("The item needs at least a name and a quantity");
       return;
     }
     if (!this.listId) {
-      showFailureMessage("No list id supplied");
-      this.router.navigate(['/groups']);
+      showFailureMessage("No list id supplied").then(() => this.router.navigate(['/groups']));
       return;
     }
     const newItem: NewShoppingListItem = {
@@ -85,12 +95,12 @@ export class ListComponent {
     }
     observable.subscribe(response => {
       if (response?.success) {
-        this.list?.items.push({_id: response.content, ...newItem});
+        this.list?.items.push({ _id: response.content, ...newItem });
         showSuccessMessage("New item added");
       } else {
         showFailureMessage(response.content);
       }
-    }, (err) => {showFailureMessage(err.error.content)});
+    }, (err) => { showFailureMessage(err.error.content) });
   }
 
   // Set the id of the selected item. Add the active class to the selected item to visualize the selection for the user
@@ -119,11 +129,11 @@ export class ListComponent {
     observable.subscribe(response => {
       if (response.success && this.list != null) {
         this.list.items = this.list.items.filter(i => i._id !== this.selectedItemId);
-        //showSuccessMessage("Item deleted").then();
+        showSuccessMessage("Item deleted");
       } else {
         showFailureMessage(response.content);
       }
-    }, (err) => {showFailureMessage(err.error.content);});
+    }, (err) => { showFailureMessage(err.error.content); });
   }
 
   onItemUpdated() {
@@ -156,6 +166,6 @@ export class ListComponent {
       } else {
         showFailureMessage(response.content);
       }
-    }, (err) => {showFailureMessage(err.error.content);});
+    }, (err) => { showFailureMessage(err.error.content); });
   }
 }

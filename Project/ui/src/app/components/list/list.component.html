@@ -63,7 +63,7 @@
                 </div>
             </div>
             <!--Delete symbol-->
-            <span *ngIf="selectedItemId == item._id" class="badge bg-secondary rounded-pill"><a (click)="deleteSelectedItem()" style="text-decoration: none;" href="#" role="button">&#x274c;</a></span>
+            <span *ngIf="selectedItemId == item._id" class="badge bg-secondary rounded-pill" (click)="deleteSelectedItem()" style="text-decoration: none;" href="#" role="button">&#x274c;</span>
             <!--Edit symbol-->
             <span *ngIf="selectedItemId == item._id" class="badge bg-secondary rounded-pill"><a style="text-decoration: none;" href="#" role="button"
                     data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false"
