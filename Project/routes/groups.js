@@ -36,6 +36,15 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, r
     }
 });
 
+router.get('/name/:pattern/:batchNum', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        const matches = await GroupOperations.findGroupsByName(Number(req.params.batchNum), req.params.pattern);
+        res.status(200).json(helpers.successResponse(matches));
+    } catch (err) {
+        helpers.handleError(err, res);
+    }
+});
+
 router.get('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         const groups = await GroupOperations.getUserGroupInfo(req.user);

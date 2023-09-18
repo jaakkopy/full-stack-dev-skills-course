@@ -1,6 +1,5 @@
-<h2>Groups</h2>
-<p *ngIf="this.groups">Click an item to show more options</p>
-<p *ngIf="!this.groups">Not a member of any group</p>
+<h2>Your Groups</h2>
+<p *ngIf="!this.groups">Not a member of any group yet</p>
 
 <div class="list-group" *ngFor="let item of this.groups">
     <a [routerLink]="['/group', item.id]" class="list-group-item list-group-item-action">
@@ -18,8 +17,8 @@
             Create a new group
         </button>
         <button class="border-black btn btn-secondary" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapse-join-group" aria-expanded="false" aria-controls="collapse-join-group">
-            Join a group
+            data-bs-target="#collapse-search-group" aria-expanded="false" aria-controls="collapse-search-group">
+            Search for a group
         </button>
     </div>
 </div>
@@ -42,6 +41,28 @@
 </div>
 
 <div class="dropdown">
+    <div class="collapse" id="collapse-search-group">
+        <form id="search-group-form" (submit)="onSearchGroupSubmission()" [formGroup]="newGroupForm">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" formControlName="name">
+            </div>
+            <input data-bs-toggle="collapse" data-bs-target="#collapse-search-group" type="submit" class="btn btn-primary" value="Search">
+        </form>
+    </div>
+</div>
+
+<div *ngIf="this.searchedGroups.length > 0">
+    <h2>Search matches</h2>
+    <div class="list-group" *ngFor="let item of this.searchedGroups">
+          <div class="list-group-item list-group-item-action">
+            <div class="fw-bold">{{item.name}}</div>
+          </div>
+      </div>
+</div>
+
+<!--
+<div class="dropdown">
     <div class="collapse" id="collapse-join-group">
         <form id="join-group-form" (submit)="onJoinGroupSubmission()" [formGroup]="newGroupForm">
             <div class="form-group">
@@ -57,3 +78,4 @@
         </form>
     </div>
 </div>
+-->

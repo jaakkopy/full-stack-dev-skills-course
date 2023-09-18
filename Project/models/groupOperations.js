@@ -88,4 +88,17 @@ const getGroupById = async (user, groupId) => {
     }
 }
 
-module.exports = {createGroup, getUserGroupInfo, deleteGroup, joinGroup, getGroupById};
+const findGroupsByName = async (batchNum, pattern) => {
+    if (isNaN(batchNum) || batchNum < 0)
+        throw new ValidationError("Batch number must be an integer greater than 0");
+    const batchSize = 50;
+    const groups = await Group.find({"name" : { $regex: pattern, $options: 'i' }}).skip(batchNum * batchSize).limit(batchSize);
+    let toReturn = [];
+    groups.forEach(g => toReturn.push({name: g.name, id: g._id}));
+    if (toReturn.length < 50) {
+        return {groups: toReturn, lastBatch: true};
+    }
+    return {groups: toReturn, lastBatch: false};
+}
+
+module.exports = {createGroup, getUserGroupInfo, deleteGroup, joinGroup, getGroupById, findGroupsByName};

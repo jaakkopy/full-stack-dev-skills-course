@@ -37,4 +37,9 @@ export class GroupService {
     const headers = makeHeadersWithAuthField();
     return headers == null ? null : this.http.get(`${this.baseUrl}groups/${groupId}`, {headers: headers});
   }
+
+  getGroupByNamePattern(pattern: string, batchNum: number): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.get(`${this.baseUrl}groups/name/${pattern}/${batchNum}`, {headers: headers});
+  }
 }

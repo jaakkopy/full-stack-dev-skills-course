@@ -11,6 +11,8 @@ import { showFailureMessage } from 'src/app/services/notifications';
 export class GroupsComponent {
   groupService: GroupService = inject(GroupService);
   groups: Group[] = [];
+  searchedGroups: Group[] = [];
+  batchNum: number = 0;
   newGroupForm = new FormGroup({
     name: new FormControl(''),
     password: new FormControl('')
@@ -45,6 +47,22 @@ export class GroupsComponent {
       });
     }
   }
+
+  onSearchGroupSubmission() {
+    if (this.newGroupForm.value.name) {
+      this.groupService.getGroupByNamePattern(this.newGroupForm.value.name, 0)?.subscribe(res => {
+        if (res.success) {
+          if (res.content.lastBatch) {
+            this.batchNum = -1;
+          }
+          this.searchedGroups = res.content.groups;
+        } else {
+          showFailureMessage(res.content);
+        }
+      }, (err) => {showFailureMessage(err.error.content);});
+    }
+  }
+
 
   onJoinGroupSubmission() {
     if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
