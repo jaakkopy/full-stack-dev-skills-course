@@ -96,7 +96,6 @@ export class ListComponent {
     observable.subscribe(response => {
       if (response?.success) {
         this.list?.items.push({ _id: response.content, ...newItem });
-        showSuccessMessage("New item added");
       } else {
         showFailureMessage(response.content);
       }
@@ -129,7 +128,6 @@ export class ListComponent {
     observable.subscribe(response => {
       if (response.success && this.list != null) {
         this.list.items = this.list.items.filter(i => i._id !== this.selectedItemId);
-        showSuccessMessage("Item deleted");
       } else {
         showFailureMessage(response.content);
       }
@@ -162,7 +160,6 @@ export class ListComponent {
           if (vals.comment)
             item.comment = vals.comment;
         }
-        showSuccessMessage("Item updated");
       } else {
         showFailureMessage(response.content);
       }
