@@ -60,17 +60,18 @@
                 <h1 class="modal-title fs-5" id="joinModalLabel">Join Group {{this.clickedName}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="join-group-form" (submit)="onJoinGroupSubmission()" [formGroup]="newGroupForm">
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" formControlName="password">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Join</button>                    
-                </div>
-            </form>
-
+            <div class="modal-body">
+                <form id="join-group-form" (submit)="onJoinGroupSubmission()" [formGroup]="newGroupForm">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" formControlName="password">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Join</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -78,6 +79,7 @@
 
 <div *ngIf="this.searchedGroups.length > 0">
     <h2>Search matches</h2>
+    <p>The matches exclude the groups you are already a member of.</p>
     <div class="list-group" *ngFor="let item of this.searchedGroups">
         <div class="list-group-item list-group-item-action">
             <div class="fw-bold">{{item.name}}</div>

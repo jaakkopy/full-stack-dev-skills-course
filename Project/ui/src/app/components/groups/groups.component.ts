@@ -11,6 +11,7 @@ import { showFailureMessage } from 'src/app/services/notifications';
 export class GroupsComponent {
   groupService: GroupService = inject(GroupService);
   groups: Group[] = [];
+  groupIds = new Set();
   searchedGroups: Group[] = [];
   clickedId: string | null = null;
   clickedName: string | null = null;
@@ -31,6 +32,7 @@ export class GroupsComponent {
     observable.subscribe(response => {
       if (response.success) {
         this.groups = response.content;
+        this.groups.forEach(g => this.groupIds.add(g.id));
       }
     });
   }
@@ -61,6 +63,7 @@ export class GroupsComponent {
             this.lastBatch = false;
           }
           this.searchedGroups = res.content.groups;
+          this.searchedGroups = this.searchedGroups.filter(g => !this.groupIds.has(g.id));
         } else {
           showFailureMessage(res.content);
         }
@@ -84,6 +87,7 @@ export class GroupsComponent {
       this.groupService.joinGroup(groupName, givenPassword)?.subscribe(res => {
         if (res.success) {
           this.groups.push({ name: groupName, id: res.content });
+          this.groupIds.add(res.content);
         } else {
           showFailureMessage(res.content);
         }
