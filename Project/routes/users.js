@@ -2,6 +2,7 @@ const Router = require('express').Router;
 const UserOperations = require('../models/userOperations.js');
 const helpers = require('./helpers.js');
 const authHelpers = require('../models/authHelpers.js');
+const passport = require('passport');
 const ValidationError = require('../errors/validationError');
 
 const router = Router();
@@ -33,6 +34,15 @@ router.post('/authenticate', async (req, res) => {
         } else {
             throw new ValidationError('Incorrect credentials')
         }
+    } catch (err) {
+        helpers.handleError(err, res);
+    }
+});
+
+router.delete('/group/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    try {
+        await UserOperations.leaveGroup(req.user, req.params.id);
+        res.status(200).json(helpers.successResponse("Left group"));
     } catch (err) {
         helpers.handleError(err, res);
     }

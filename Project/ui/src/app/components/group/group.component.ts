@@ -59,4 +59,29 @@ export class GroupComponent {
       } 
     });
   }
+
+  leaveGroup() {
+    if (!this.groupId) {
+      showFailureMessage("No group id supplied").then(() => this.router.navigate(['/groups']));
+      return;
+    }
+
+    const onAgree = () => {
+      this.groupService.leaveGroup(this.groupId!)?.subscribe(res => {
+        if (res?.success) {
+          showSuccessMessage("Group left").then(() => this.router.navigate(['/groups']));
+        } else {
+          showFailureMessage(res.content);
+        }
+      }, (err) => {
+        showFailureMessage(err.error.content);
+      });
+    }
+
+    showConfirmation(`Do you really want to leave group ${this.groupData.name}?`).then((result) => {
+      if (result.isConfirmed) {
+        onAgree();
+      } 
+    });
+  }
 }

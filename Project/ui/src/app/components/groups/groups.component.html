@@ -47,35 +47,50 @@
                 <label>Name</label>
                 <input type="text" class="form-control" formControlName="name">
             </div>
-            <input data-bs-toggle="collapse" data-bs-target="#collapse-search-group" type="submit" class="btn btn-primary" value="Search">
+            <input data-bs-toggle="collapse" data-bs-target="#collapse-search-group" type="submit"
+                class="btn btn-primary" value="Search">
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="joinModal" tabindex="-1" aria-labelledby="joinModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="joinModalLabel">Join Group {{this.clickedName}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="join-group-form" (submit)="onJoinGroupSubmission()" [formGroup]="newGroupForm">
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" formControlName="password">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Join</button>                    
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 
 <div *ngIf="this.searchedGroups.length > 0">
     <h2>Search matches</h2>
     <div class="list-group" *ngFor="let item of this.searchedGroups">
-          <div class="list-group-item list-group-item-action">
+        <div class="list-group-item list-group-item-action">
             <div class="fw-bold">{{item.name}}</div>
-          </div>
-      </div>
-</div>
 
-<!--
-<div class="dropdown">
-    <div class="collapse" id="collapse-join-group">
-        <form id="join-group-form" (submit)="onJoinGroupSubmission()" [formGroup]="newGroupForm">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" formControlName="name">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" formControlName="password">
-            </div>
-            <input data-bs-toggle="collapse" data-bs-target="#collapse-join-group" type="submit" class="btn btn-primary"
-                value="Join">
-        </form>
+            <button (click)="setClickedGroupInfo(item.id, item.name)" type="button" class="btn btn-primary"
+                data-bs-toggle="modal" data-bs-target="#joinModal">
+                Join
+            </button>
+
+        </div>
+    </div>
+
+    <div *ngIf="!this.lastBatch">
+        <button (click)="onSearchForMoreResultsClick()" class="btn btn-primary">Show more results</button>
     </div>
 </div>
--->

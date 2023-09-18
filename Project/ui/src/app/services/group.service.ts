@@ -42,4 +42,9 @@ export class GroupService {
     const headers = makeHeadersWithAuthField();
     return headers == null ? null : this.http.get(`${this.baseUrl}groups/name/${pattern}/${batchNum}`, {headers: headers});
   }
+
+  leaveGroup(groupId: string): null | Observable<any> {
+    const headers = makeHeadersWithAuthField();
+    return headers == null ? null : this.http.delete(`${this.baseUrl}users/group/${groupId}`, {headers: headers});
+  }
 }

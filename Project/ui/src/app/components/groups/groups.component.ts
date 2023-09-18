@@ -12,7 +12,10 @@ export class GroupsComponent {
   groupService: GroupService = inject(GroupService);
   groups: Group[] = [];
   searchedGroups: Group[] = [];
-  batchNum: number = 0;
+  clickedId: string | null = null;
+  clickedName: string | null = null;
+  batchNum = 0;
+  lastBatch = false;
   newGroupForm = new FormGroup({
     name: new FormControl(''),
     password: new FormControl('')
@@ -53,7 +56,9 @@ export class GroupsComponent {
       this.groupService.getGroupByNamePattern(this.newGroupForm.value.name, 0)?.subscribe(res => {
         if (res.success) {
           if (res.content.lastBatch) {
-            this.batchNum = -1;
+            this.lastBatch = true;
+          } else {
+            this.lastBatch = false;
           }
           this.searchedGroups = res.content.groups;
         } else {
@@ -63,14 +68,22 @@ export class GroupsComponent {
     }
   }
 
+  setClickedGroupInfo(id: string, name: string) {
+    this.clickedId = id;
+    this.clickedName = name;
+  }
+
+  onSearchForMoreResultsClick() {
+
+  }
 
   onJoinGroupSubmission() {
-    if (this.newGroupForm.value.name && this.newGroupForm.value.password) {
-      const name = this.newGroupForm.value.name;
-      const password = this.newGroupForm.value.password;
-      this.groupService.joinGroup(name, password)?.subscribe(res => {
+    const groupName = this.clickedName;
+    const givenPassword = this.newGroupForm.value.password;
+    if (groupName && givenPassword) {
+      this.groupService.joinGroup(groupName, givenPassword)?.subscribe(res => {
         if (res.success) {
-          this.groups.push({ name, id: res.content });
+          this.groups.push({ name: groupName, id: res.content });
         } else {
           showFailureMessage(res.content);
         }
@@ -79,4 +92,5 @@ export class GroupsComponent {
       });
     }
   }
+
 }

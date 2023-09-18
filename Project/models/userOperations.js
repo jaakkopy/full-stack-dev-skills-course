@@ -1,6 +1,7 @@
 const {hashPassword} = require('./authHelpers');
 const ValidationError = require('../errors/validationError');
 const User = require('./user');
+const { default: mongoose } = require('mongoose');
 
 const validateRegisterData = (userData) => {
     if (!userData?.username || !userData?.email || !userData?.password)
@@ -24,4 +25,10 @@ const getUserById = async (id) => {
     return user;
 }
 
-module.exports = {registerUser, getUserById, getUserByUsername};
+const leaveGroup = async (user, groupId) => {
+    const id = new mongoose.Types.ObjectId(groupId);
+    user.groups = user.groups.filter(g => !g._id.equals(id));
+    await user.save();
+}
+
+module.exports = {registerUser, getUserById, getUserByUsername, leaveGroup};
