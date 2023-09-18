@@ -53,9 +53,9 @@ export class GroupsComponent {
     }
   }
 
-  onSearchGroupSubmission() {
+  private loadSearchResults() {
     if (this.newGroupForm.value.name) {
-      this.groupService.getGroupByNamePattern(this.newGroupForm.value.name, 0)?.subscribe(res => {
+      this.groupService.getGroupByNamePattern(this.newGroupForm.value.name, this.batchNum)?.subscribe(res => {
         if (res.success) {
           if (res.content.lastBatch) {
             this.lastBatch = true;
@@ -63,7 +63,7 @@ export class GroupsComponent {
             this.lastBatch = false;
           }
           this.searchedGroups = res.content.groups;
-          this.searchedGroups = this.searchedGroups.filter(g => !this.groupIds.has(g.id));
+          this.searchedGroups = this.searchedGroups.filter(g => !this.groupIds.has(g.id)).sort();
         } else {
           showFailureMessage(res.content);
         }
@@ -71,13 +71,24 @@ export class GroupsComponent {
     }
   }
 
+  onSearchGroupSubmission() {
+    this.batchNum = 0;
+    this.loadSearchResults();  
+  }
+
   setClickedGroupInfo(id: string, name: string) {
     this.clickedId = id;
     this.clickedName = name;
   }
 
-  onSearchForMoreResultsClick() {
+  loadPreviousResults() {
+    this.batchNum = Math.max(0, this.batchNum - 1);
+    this.loadSearchResults();  
+  }
 
+  loadNextResults() {
+    this.batchNum += 1;
+    this.loadSearchResults();
   }
 
   onJoinGroupSubmission() {
@@ -88,6 +99,7 @@ export class GroupsComponent {
         if (res.success) {
           this.groups.push({ name: groupName, id: res.content });
           this.groupIds.add(res.content);
+          this.searchedGroups = this.searchedGroups.filter(g => !this.groupIds.has(g.id)).sort();
         } else {
           showFailureMessage(res.content);
         }

@@ -92,7 +92,11 @@
         </div>
     </div>
 
-    <div *ngIf="!this.lastBatch">
-        <button (click)="onSearchForMoreResultsClick()" class="btn btn-primary">Show more results</button>
+    <div *ngIf="!this.lastBatch" class="btn-group">
+        <button (click)="loadNextResults()" class="btn btn-primary">Show the next 50 results</button>
+    </div>
+    <button *ngIf="this.batchNum > 0" (click)="loadPreviousResults()" class="btn btn-secondary">Show the previous 50 results</button>
+    <div *ngIf="this.lastBatch">
+        <p>No more results to show</p>
     </div>
 </div>
