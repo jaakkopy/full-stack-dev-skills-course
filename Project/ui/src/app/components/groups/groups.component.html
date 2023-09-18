@@ -10,48 +10,50 @@
 </div>
 <br>
 
-<div class="row">
-    <div class="btn-group">
-        <button class="border-black btn btn-secondary" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapse-new-group" aria-expanded="false" aria-controls="collapse-new-group">
-            Create a new group
-        </button>
-        <button class="border-black btn btn-secondary" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapse-search-group" aria-expanded="false" aria-controls="collapse-search-group">
-            Search for a group
-        </button>
+<div class="btn-group">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+        Create a New Group
+    </button>
+</div>
+
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createModalLabel">Create a Group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="new-group-form" (submit)="onNewGroupSubmission()" [formGroup]="newGroupForm">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" formControlName="name">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" formControlName="password">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="dropdown">
-    <div class="collapse" id="collapse-new-group">
-        <form id="new-group-form" (submit)="onNewGroupSubmission()" [formGroup]="newGroupForm">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" formControlName="name">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" formControlName="password">
-            </div>
-            <input data-bs-toggle="collapse" data-bs-target="#collapse-new-group" type="submit" class="btn btn-primary"
-                value="Create">
-        </form>
-    </div>
-</div>
-
-<div class="dropdown">
-    <div class="collapse" id="collapse-search-group">
-        <form id="search-group-form" (submit)="onSearchGroupSubmission()" [formGroup]="newGroupForm">
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" class="form-control" formControlName="name">
-            </div>
+<h3>Search for Groups</h3>
+<form id="search-group-form" (submit)="onSearchGroupSubmission()" [formGroup]="newGroupForm">
+    <div class="form-group">
+        <div class="row">
+            <input placeholder="Type group name" type="text" class="col form-control" formControlName="name">
             <input data-bs-toggle="collapse" data-bs-target="#collapse-search-group" type="submit"
-                class="btn btn-primary" value="Search">
-        </form>
+                class="col-2 btn btn-primary" value="Search">
+        </div>
     </div>
-</div>
+</form>
 
 <div class="modal fade" id="joinModal" tabindex="-1" aria-labelledby="joinModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -78,7 +80,6 @@
 
 
 <div *ngIf="this.searchedGroups.length > 0">
-    <h2>Search matches</h2>
     <p>The matches exclude the groups you are already a member of.</p>
     <div class="list-group" *ngFor="let item of this.searchedGroups">
         <div class="list-group-item list-group-item-action">
@@ -95,7 +96,8 @@
     <div *ngIf="!this.lastBatch" class="btn-group">
         <button (click)="loadNextResults()" class="btn btn-primary">Show the next 50 results</button>
     </div>
-    <button *ngIf="this.batchNum > 0" (click)="loadPreviousResults()" class="btn btn-secondary">Show the previous 50 results</button>
+    <button *ngIf="this.batchNum > 0" (click)="loadPreviousResults()" class="btn btn-secondary">Show the previous 50
+        results</button>
     <div *ngIf="this.lastBatch">
         <p>No more results to show</p>
     </div>
