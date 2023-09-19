@@ -4,7 +4,8 @@
 - The group members can view all of the group's shopping lists and add to them.
 - There are also some simple statistics calculated based on all of the group's shopping lists. The stats are visualised with [Chart.js](https://www.chartjs.org/docs/latest/).
 - The UI is made with [Angular](https://angular.io/).
-- The server is made with [Node.js](https://nodejs.org/en) and 
+- The server is made with [Node.js](https://nodejs.org/en) and  [Express](https://expressjs.com/).
+- [MongoDB](https://www.mongodb.com/) is used as the database. ODM is added with [Mongoose](https://mongoosejs.com/)
 
 # How to run the project 
 
