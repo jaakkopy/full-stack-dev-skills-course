@@ -7,6 +7,10 @@
 - The server is made with [Node.js](https://nodejs.org/en) and  [Express](https://expressjs.com/).
 - [MongoDB](https://www.mongodb.com/) is used as the database. ODM is added with [Mongoose](https://mongoosejs.com/)
 
+# Link to the demo video
+
+[here](https://lut-my.sharepoint.com/:v:/g/personal/jaakko_pyrhonen_student_lut_fi/ETHaztap1eNGiVbcg9Y8Ka0B7u3ZWHfGQD0UF2LFp1bQ5A?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0RpcmVjdCJ9fQ&e=Oa7MZ0)
+
 # How to run the project 
 
 ## Set up the .env
