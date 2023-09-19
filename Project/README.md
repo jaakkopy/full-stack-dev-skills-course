@@ -21,7 +21,7 @@ JWT_EXPIRATION=<a number indicating the number of seconds the JWT should be vali
 
 ## Start mongod if you are using a localhost database
 
-If you want to connect to a database on localhost, the mongo daemon process needs to be running. If mongodb is installed, on Linux with systemctl run:
+If you want to connect to a database on localhost, the mongo daemon process needs to be installed and running. If you don't have mongodb installed, install the latest version (version 7.0.1 was used for this project). If mongodb is installed, on Linux with systemctl run:
 ```
 sudo systemctl start mongod
 ```
