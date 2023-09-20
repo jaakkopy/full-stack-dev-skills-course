@@ -13,7 +13,13 @@
 
 # How to run the project 
 
-## Set up the .env
+## 1. Clone the repository
+
+```
+git clone https://github.com/jake52227/full-stack-dev-skills-course.git
+```
+
+## 2. Set up the .env
 
 Create a `.env` file in the root of the `Project` folder. The file should contain the following entries:
 ```
@@ -23,14 +29,16 @@ JWT_SECRET=<secret string used for signing the JWTs>
 JWT_EXPIRATION=<a number indicating the number of seconds the JWT should be valid. For example 86400 for one day>
 ```
 
-## Start mongod if you are using a localhost database
+## 3. Start mongod if you are using a localhost database
 
 If you want to connect to a database on localhost, the mongo daemon process needs to be installed and running. If you don't have mongodb installed, install the latest version (version 7.0.1 was used for this project). If mongodb is installed, on Linux with systemctl run:
 ```
 sudo systemctl start mongod
 ```
 
-## Run with Docker
+## 4. Run the project
+
+### 4.1 Run with Docker
 
 If you have Docker installed I'd recommend using that.
 
@@ -39,17 +47,17 @@ If the Docker daemon is not running, start it with:
 sudo systemctl start docker
 ```
 
-### With Docker compose
+#### 4.1.1 With Docker compose
 
-It should be enough to run this on the project's root:
+It should be enough to run this on the project's root (`Project` folder):
 ```
 sudo docker compose up -d --build
 ```
 This builds the container and starts it on the host network. The server should be running on http://localhost:5000.
 
-### Without Docker compose
+#### 4.1.2 Without Docker compose
 
-First build the image:
+First, in the `Project` folder, build the image:
 ```
 sudo docker build . -t <name for the image>
 ```
@@ -59,7 +67,7 @@ sudo docker run --network host -d <name of the image>
 ```
 Now it should be up & running on http://localhost:5000.
 
-## Run without Docker on localhost
+### 4.2 Run without Docker on localhost
 
 If you chose to not use Docker, the following steps should to be taken:
 1. If you don't have node version 18 (version 18.17.1 was used during development), please install it. It's easily done with `sudo npm install -g n` and `sudo n install 18`
