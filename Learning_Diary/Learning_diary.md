@@ -279,7 +279,7 @@ I wanted to see if I could deploy the app with Docker. I used Docker since I cou
 I tried setting up the Docker container and faced a weird issue. I tracked the bug down to `bcrypt` with Alpine Linux and [this issue](https://github.com/kelektiv/node.bcrypt.js/issues/528). This error probably stems from the fact that Alpine doesn't use the standard glibc implementation - some packages need to be built from source because of this. This [stackoverflow post](https://stackoverflow.com/questions/51168388/bcrypt-build-from-source-on-alpinenode-and-causes-segfaults-using-this-docker) suggested using `bcryptjs` instead and that indeed did fix the issue.
 
 I'll continue tomorrow.
-# 17.9
+# 17.9.2023
 
 Today I got the deployment with Docker to work. I set the mongodb URI to the URI I got from Atlas and the deployment went well. 
 As the app is approaching the finish line I asked another person to test it a bit, and I found a few UI issues to fix, so I'll be doing that today.
@@ -291,7 +291,7 @@ The main issues were:
 
 I changed the layout around and fixed the notification issues by adding [sweetalert2 module](https://www.npmjs.com/package/sweetalert2/v/11.1.7) like I did in the practice project.
 
-# 18.9
+# 18.9.2023
 
 - I changed the UI even more by changing some of the dropdown forms to modals, which I find more familiar to use.
 - I created a search functionality for the "join group". The user can search for a group by it's name and the list displays at most 50 matches at a time in alphabetical order. I did this by using Mongoose's `skip` and `limit` functions and dividing the records into "batches" by number.
@@ -299,7 +299,7 @@ I changed the layout around and fixed the notification issues by adding [sweetal
 
 I'm reasonably happy with the app now and can't think of anything major I'd like to add, so I'll probably start to finish everything up, and start making the guide and demo video tomorrow.
 
-# 19.9
+# 19.9.2023
 
 I created the guide on how to run the project and a video demonstrating the main features of the app.
 
