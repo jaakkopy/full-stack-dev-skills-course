@@ -45,9 +45,9 @@ It should be enough to run this on the project's root:
 ```
 sudo docker compose up -d --build
 ```
-This builds the container and starts it on the host network.
+This builds the container and starts it on the host network. The server should be running on http://localhost:5000.
 
-## Without Docker compose
+### Without Docker compose
 
 First build the image:
 ```
@@ -57,14 +57,14 @@ Start the container on the host network:
 ```
 sudo docker run --network host -d <name of the image>
 ```
-Now it should be up & running.
+Now it should be up & running on http://localhost:5000.
 
 ## Run without Docker on localhost
 
-If you don't want to use Docker, the following steps should to be taken:
-1. If you don't have node version 18, please install it. It's easily done with `sudo npm install -g n` and `sudo n install 18`
+If you chose to not use Docker, the following steps should to be taken:
+1. If you don't have node version 18 (version 18.17.1 was used during development), please install it. It's easily done with `sudo npm install -g n` and `sudo n install 18`
 2. `cd` to `./ui` (in the `Project` folder).
-3. If you don't have angular cli, please install the latest version with `npm i @angular/cli` (might have to use sudo)
+3. If you don't have angular cli version 16 (version 16.2.1 was used during development), please install the latest version with `npm i @angular/cli` (might have to use sudo)
 4. Install packages with `npm install`. 
 5. Build the Angular project with `ng build`.
 6. `cd` back to `Project`.
